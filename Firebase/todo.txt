@@ -1,0 +1,16 @@
+// TODO: after adding or deleting rows, reset the priorities
+// TODO: re-order steps
+// TODO: hide images option
+// TODO: audio narration
+// TODO: add reference #s to all steps (even unnumbered ones)
+
+//---------------------------------------------------------------------------------------
+
+// DONE: create the callout-maker component
+// DONE: images max-height of screen height (and scale the callout boxes)
+// DONE: add image button, per step
+// DONE: upload filename should be read-only
+// DONE: "delete image" button
+// DONE: add/delete callout button
+// DONE: delete step button
+// DONE: top navbar menu

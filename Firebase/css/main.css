@@ -1,0 +1,81 @@
+body {
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  background: #c8b2ac;
+  padding-top: 50px; }
+
+#mainContainer {
+  padding: 0; }
+
+.tutorial {
+  background: white;
+  min-height: 800px;
+  padding: 10px; }
+
+.taskImage .panel-body {
+  background-color: #333; }
+
+.vertically-centered {
+  display: flex;
+  align-items: center; }
+  .vertically-centered h1 {
+    margin-top: 10px;
+    text-align: right; }
+
+.task-step {
+  padding: 10px 0; }
+  .task-step .button-row {
+    margin-bottom: 10px; }
+    .task-step .button-row h1 {
+      margin-bottom: 0;
+      margin-top: 0; }
+    .task-step .button-row .btn.active {
+      box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.5); }
+  .task-step .image-group {
+    margin-top: 10px; }
+  .task-step .button-group {
+    margin-top: 10px; }
+    .task-step .button-group button + button {
+      margin-left: 10px; }
+
+.task-step:nth-child(even) {
+  background: #d0d4dc; }
+
+.task-step:nth-child(odd) {
+  background: #efefef; }
+
+.form-group {
+  margin-bottom: 0; }
+
+.callout {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 5px solid red;
+  box-sizing: content-box; }
+
+.image-holder {
+  position: relative; }
+
+.task {
+  margin: 20px 0 !important; }
+
+#image-upload {
+  visibility: hidden; }
+
+.circle {
+  border-radius: 1em;
+  background: #c5c5d3;
+  line-height: 1.47;
+  padding: 6px 12px;
+  box-shadow: inset 3px 2px 12px black; }
+
+.right-block {
+  margin-left: auto;
+  margin-right: 0; }
+
+.nav .dropdown-menu li a i {
+  position: absolute;
+  margin-left: -1.2em;
+  margin-top: .2em; }
+
+/*# sourceMappingURL=main.css.map */

@@ -11,13 +11,20 @@ var Tutorial = React.createClass({
 		var createTask = function (task, key) {
 			var newFirebaseKey = "tasks/" + key;
 
-			return <Task {...task} key={key} firebaseRefs={ self.props.firebaseRefs } firebaseKey={ newFirebaseKey } />
+			return <Task {...task} key={key} id={key} firebaseRefs={ self.props.firebaseRefs } firebaseKey={ newFirebaseKey } />
 		};
 
 		return (
-			<div>
-				<input type="text" className="form-control input-lg" value={this.props.title} placeholder="Tutorial Title" onChange={ this.onChange }></input>
-				{ $.map(this.props.tasks, createTask) }
+			<div className="tutorial">
+				<div className="input-group input-group-lg">
+					<div className="input-group-btn">
+						<button type="button" className="btn btn-default">Title</button>
+					</div>
+					<input type="text" className="form-control input-lg" value={this.props.title} placeholder="Tutorial Title" onChange={ this.onChange }></input>
+				</div>
+				<div className="panel-group" id="accordion" role="tablist">
+					{ $.map(this.props.tasks, createTask) }
+				</div>
 			</div>
 		);
 	},
