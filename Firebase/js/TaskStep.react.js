@@ -25,7 +25,7 @@ var TaskStep = React.createClass({
 				<div className="form-group image-group">
 					<label className="col-sm-2 control-label">Image</label>
 					<div className="col-sm-10">
-						<TaskImage image={ this.props.image === "" ? "https://placehold.it/100x100" : this.props.image } rect={this.props.rect} firebaseRefs={ this.props.firebaseRefs } firebaseKey={ this.props.firebaseKey } onExpand={ this.props.onExpand } />
+						<TaskImage image={ this.props.image === "" ? "https://placehold.it/100x100" : this.props.image } rect={this.props.rect} firebaseRefs={ this.props.firebaseRefs } firebaseKey={ this.props.firebaseKey } />
 					</div>
 					<div className="col-sm-2">
 					</div>
@@ -90,6 +90,7 @@ var TaskStep = React.createClass({
 						{ stepLabel }
 					</div>
 					<div className="col-sm-10">
+						<div>{this.props[".priority"]}</div>
 						<div className="btn-group" data-toggle="buttons">
 							<label className={ "btn btn-primary " + ((this.props.type === "numbered") ? "active" : "")} onClick={ this.onClickType } >
 								<input type="radio" name="options" id="type-numbered" checked={ this.props.type === "numbered" } onChange={ this.onChangeNothing } > Numbered</input>
@@ -202,26 +203,22 @@ var TaskStep = React.createClass({
 		switch ($(event.target).attr("id")) {
 			case "insert-before":
 				var ref = this.props.firebaseRefs.child(this.props.firebaseKey);
-				ref.once("value", function (snapshot) {
-					var newRow = ref.parent().push( { text: "New row." } );
-					var oldPriority = snapshot.getPriority() || 100;
-					var newPriority = oldPriority - 1;
-					newRow.setPriority(newPriority);
-				});
+				var newRow = ref.parent().push( { text: "New row." } );
+				var newPriority = this.props[".priority"] - 1;
+				newRow.setPriority(newPriority);
 				break;
 			case "insert-after":
 				var ref = this.props.firebaseRefs.child(this.props.firebaseKey);
-				ref.once("value", function (snapshot) {
-					var newRow = ref.parent().push( { text: "New row." } );
-					var oldPriority = snapshot.getPriority() || 100;
-					var newPriority = oldPriority + 1;
-					newRow.setPriority(newPriority);
-				});
+				var newRow = ref.parent().push( { text: "New row." } );
+				var newPriority = this.props[".priority"] + 1;
+				newRow.setPriority(newPriority);
 				break;
 			case "remove-row":
 				var ref = this.props.firebaseRefs.child(this.props.firebaseKey);
 				ref.remove();
 				break;
 		}
+
+		this.props.onChangeOrder();
 	}
 });

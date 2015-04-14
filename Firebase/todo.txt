@@ -1,8 +1,8 @@
-// TODO: after adding or deleting rows, reset the priorities
+// TODO: re-calculate .priorities after adding/removing rows
+// TODO: figure out why drag/drop doesn't update the children correctly
+// TODO: export data (and load into Framework)
 // TODO: re-order steps
-// TODO: hide images option
 // TODO: audio narration
-// TODO: add reference #s to all steps (even unnumbered ones)
 
 //---------------------------------------------------------------------------------------
 
@@ -14,3 +14,6 @@
 // DONE: add/delete callout button
 // DONE: delete step button
 // DONE: top navbar menu
+// DONE: hide images option
+// DONE: add reference #s to all steps (even unnumbered ones)
+// DONE: after loading, set the steps order according to priority

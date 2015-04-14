@@ -58,7 +58,8 @@ var ReactFireMixin = {
         newState[bindVar] = this._toArray(dataSnapshot.val());
       }
       else {
-        newState[bindVar] = dataSnapshot.val();
+	    // use exportVal instead of val so we get priority
+        newState[bindVar] = dataSnapshot.exportVal();
       }
       this.setState(newState);
     }.bind(this), cancelCallback);

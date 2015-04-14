@@ -36,12 +36,14 @@ var TutorialApp = React.createClass({
 							<span className="icon-bar"></span>
 							<span className="icon-bar"></span>
 						</button>
-						<a href="#" className="navbar-brand">Que Interactive CMS</a>
+						<a className="navbar-brand">Que Interactive CMS</a>
 					</div>
 					<div id="navbarCollapse" className="collapse navbar-collapse">
 						<ul className="nav navbar-nav">
-							<li className="active"><a href="#">Home</a></li>
+							{/*
+							<li><a href="#">Home</a></li>
 							<li><a href="#">Profile</a></li>
+							*/}
 							<li className="dropdown">
 								<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">View <span className="caret"></span></a>
 								<ul className="dropdown-menu" role="menu">
@@ -50,9 +52,10 @@ var TutorialApp = React.createClass({
 									<li><a href="#">Separated link</a></li>
 								</ul>
 							</li>
+							<li><a href="#" onClick={ this.onClickPublish }>Publish</a></li>
 						</ul>
 						<ul className="nav navbar-nav navbar-right">
-							<li><a href="#">Login</a></li>
+							<li><a href="#" onClick={ this.onClickLogin }>Login</a></li>
 						</ul>
 					</div>
 				</nav>
@@ -69,5 +72,13 @@ var TutorialApp = React.createClass({
 
 		this.state.showImages = !this.state.showImages;
 		this.setState(this.state);
+	},
+
+	onClickPublish: function (event) {
+		event.preventDefault();
+	},
+
+	onClickLogin: function (event) {
+		event.preventDefault();
 	}
 });
