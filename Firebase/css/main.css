@@ -59,8 +59,9 @@ body {
 .task {
   margin: 20px 0 !important; }
 
-#image-upload {
-  visibility: hidden; }
+#image-upload, #audio-upload {
+  visibility: hidden;
+  display: none; }
 
 .circle {
   border-radius: 1em;

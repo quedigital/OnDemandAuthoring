@@ -88,8 +88,9 @@ body {
 	margin: 20px 0 !important;
 }
 
-#image-upload {
+#image-upload, #audio-upload {
 	visibility: hidden;
+	display: none;
 }
 
 .circle {

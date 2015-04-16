@@ -46,6 +46,8 @@ var TaskStep = React.createClass({
 			buttons = (
 				<div className="col-sm-10">
 					<button className="btn btn-info" onClick={ this.onClickAddImage }>Add Image</button>
+					<button className="btn btn-success" onClick={ this.onClickAddAudio }>Add Audio</button>
+					<input type="file" accept="audio/*" id="audio-upload" onChange={ this.onSelectAudioFile }></input>
 				</div>
 			)
 		} else if (this.props.image === "") {
@@ -143,6 +145,14 @@ var TaskStep = React.createClass({
 		ref.remove();
 	},
 
+	onClickAddAudio: function () {
+		var el = React.findDOMNode(this);
+		console.log("here");
+		var input = $(el).find("#audio-upload");
+		console.log(input);
+		input.click();
+	},
+
 	onClickAddCallout: function () {
 		var ref = this.props.firebaseRefs.child(this.props.firebaseKey);
 
@@ -184,6 +194,22 @@ var TaskStep = React.createClass({
 			var ref = self.props.firebaseRefs.child(self.props.firebaseKey);
 
 			ref.update( { image: filePayload } );
+		};
+		reader.readAsDataURL(f);
+	},
+
+	onSelectAudioFile: function (event) {
+		var self = this;
+
+		var f = event.target.files[0];
+
+		var reader = new FileReader();
+		reader.onload = function (fileEvent) {
+			var filePayload = fileEvent.target.result;
+
+			var ref = self.props.firebaseRefs.child(self.props.firebaseKey);
+
+			ref.update( { audio: filePayload } );
 		};
 		reader.readAsDataURL(f);
 	},

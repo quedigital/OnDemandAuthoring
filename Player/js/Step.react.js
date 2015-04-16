@@ -17,13 +17,34 @@ var Step = React.createClass({
 	},
 
 	componentDidMount: function () {
+		if (this.refs.myAudio) {
+			var audio = this.refs.myAudio.getDOMNode();
+			console.log("trying");
+			console.log(audio);
+			audio.addEventListener("ended", this.onAudioPlayed);
+		}
+
 		if (this.props.current) {
 			this.findImageScale();
 
 			this.positionText();
 
 			this.props.onCurrent(this);
+
+			this.animateText();
+
+			this.playAudio();
 		}
+	},
+
+	componentWillUnmount: function () {
+		if (this.refs.myAudio) {
+			var audio = this.refs.myAudio.getDOMNode();
+			audio.removeEventListener("onended", this.onAudioPlayed);
+		}
+	},
+
+	componentWillUpdate: function () {
 	},
 
 	componentDidUpdate: function () {
@@ -33,7 +54,27 @@ var Step = React.createClass({
 			this.positionText();
 
 			this.props.onCurrent(this);
+
+			this.animateText();
+
+			this.playAudio();
 		}
+	},
+
+	playAudio: function () {
+		if (this.props.audio) {
+			var audio = this.refs.myAudio.getDOMNode();
+			audio.play();
+		}
+	},
+
+	onAudioPlayed: function () {
+		this.props.advance();
+	},
+
+	animateText: function () {
+		var txt = this.refs.myText.getDOMNode();
+		$(txt).hide(0).removeClass("animated").addClass("animated fadeIn").show(0);
 	},
 
 	render: function () {
@@ -44,8 +85,13 @@ var Step = React.createClass({
 		else
 			classes += " current";
 
+		var audio;
+		if (this.props.audio)
+			audio = <audio ref="myAudio"><source src={this.props.audio}></source></audio>;
+
 		return (
 			<div className={classes} onClick={this.onClickStep}>
+				{audio}
 				<img ref="myImage" className="step-image" src={this.props.image}/>
 				<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} advance={this.props.advance}/>
 				<p ref="myText" className="step-text">{this.props.text}</p>
@@ -82,8 +128,6 @@ var Step = React.createClass({
 			free.right = (w - (rect[0] + rect[2])) / w;
 			free.bottom = (h - (rect[1] + rect[3])) / h;
 
-			console.log(free);
-
 			function findLargestSide (obj) {
 				var max = Math.max(obj.left, obj.top, obj.right, obj.bottom);
 				if (max == obj.left) return "left";
@@ -107,7 +151,7 @@ var Step = React.createClass({
 					my = "center top+20"; at = "center bottom"; arrows = "arrow arrow-top"; break;
 			}
 
-			$(txt).position({my: my, at: at, of: hotspot, collision: "fit"}).addClass(arrows)
+			$(txt).position({my: my, at: at, of: hotspot, collision: "fit"}).addClass(arrows);
 		} else {
 			$(txt).position({my: "center center", at: "center center", of: holder, collision: "fit"});
 		}

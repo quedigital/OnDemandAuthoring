@@ -11,15 +11,21 @@ var Task = React.createClass({
 		return <Step {...item} myKey={index} current={current} key={index} advance={this.doAdvance} onCurrent={this.onCurrentStep}></Step>
 	},
 
+	componentDidUpdate: function () {
+		this.positionButton();
+	},
+
+	componentDidMount: function () {
+		this.positionButton();
+	},
+
 	render: function () {
 		if (this.state.currentStep) {
-			var center;
+			var controls;
 			var step = this.props.steps[this.state.currentStep];
 			if (!step.rect) {
-				center = (
-					<div className="centered-pane">
-						<button id="continue-button" className="btn btn-success" onClick={this.doAdvance}>Continue</button>
-					</div>
+				controls = (
+					<button id="continue-button" className="btn btn-success" onClick={this.doAdvance}>Continue</button>
 				);
 			}
 		}
@@ -29,7 +35,7 @@ var Task = React.createClass({
 				<div className="step-holder">
 					{ $.map(this.props.steps, this.createStep) }
 				</div>
-				{center}
+				{controls}
 				<button className="btn btn-primary" onClick={this.onClickPrevStep}>Prev</button>
 				<button className="btn btn-success" onClick={this.onClickNextStep}>Next</button>
 			</div>
@@ -88,12 +94,17 @@ var Task = React.createClass({
 	},
 
 	onCurrentStep: function (step) {
+	},
+
+	positionButton: function () {
 		var el = $(this.getDOMNode());
 		var btn = el.find("#continue-button");
 
-		if (btn) {
-			var text = $(step.getDOMNode()).find(".step-text");
-			btn.position({ my: "center top+20", at: "center bottom", of: text, collision: "fit" });
+		var step = el.find(".step.current");
+
+		if (btn.length) {
+			var text = step.find(".step-text");
+			btn.hide(0).position({ my: "center top+20", at: "center bottom", of: text, collision: "none" }).addClass("animated fadeIn").animate( { _justDelay: 0 }, 1000, function () { btn.show(0); } );
 		}
 	}
 });

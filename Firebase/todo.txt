@@ -1,4 +1,7 @@
 // TODO: click, double-click, hover
+// TODO: export compressed
+// TODO: export per task
+// TODO: export TOC
 // TODO: save rect as integers
 // TODO: intro paragraph option (doesn't go into Player)
 // TODO: re-calculate .priorities after adding/removing rows
