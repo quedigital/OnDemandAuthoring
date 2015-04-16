@@ -1,0 +1,9 @@
+// TODO: animate text boxes
+// TODO: cursor
+// TODO: watch versus try
+// TODO: hint/error messages
+// TODO: add pointer arrows to callout (library function?)
+
+//---------------------------------------------------------------------------------------
+
+// DONE: make text boxes green

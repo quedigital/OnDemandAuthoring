@@ -1,3 +1,12 @@
+function download (content, filename, contentType) {
+	if (!contentType) contentType = 'application/octet-stream';
+	var a = document.createElement('a');
+	var blob = new Blob([content], { 'type': contentType });
+	a.href = window.URL.createObjectURL(blob);
+	a.download = filename;
+	a.click();
+}
+
 var TutorialApp = React.createClass({
 	mixins: [ReactFireMixin],
 
@@ -76,6 +85,11 @@ var TutorialApp = React.createClass({
 
 	onClickPublish: function (event) {
 		event.preventDefault();
+
+		console.log("PUBLISH!");
+
+		var json = $.toJSON(this.state.tutorial);
+		download(json, "que-interactive.txt");
 	},
 
 	onClickLogin: function (event) {

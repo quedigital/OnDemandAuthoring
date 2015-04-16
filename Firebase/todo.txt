@@ -1,6 +1,8 @@
+// TODO: click, double-click, hover
+// TODO: save rect as integers
+// TODO: intro paragraph option (doesn't go into Player)
 // TODO: re-calculate .priorities after adding/removing rows
 // TODO: figure out why drag/drop doesn't update the children correctly
-// TODO: export data (and load into Framework)
 // TODO: re-order steps
 // TODO: audio narration
 
@@ -17,3 +19,4 @@
 // DONE: hide images option
 // DONE: add reference #s to all steps (even unnumbered ones)
 // DONE: after loading, set the steps order according to priority
+// DONE: export data (and load into Framework)
