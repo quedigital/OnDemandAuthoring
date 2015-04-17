@@ -33,6 +33,7 @@ body {
 
 .task-step {
 	padding: 10px 0;
+	border-top: 5px solid black;
 
 	.button-row {
 		margin-bottom: 10px;
@@ -112,4 +113,12 @@ body {
 		margin-left: -1.2em;
 		margin-top: .2em;
 	}
+}
+
+.top-gap {
+	margin-top: 10px;
+}
+
+.bottom-gap {
+	margin-bottom: 10px;
 }

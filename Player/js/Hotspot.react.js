@@ -11,7 +11,7 @@ var Hotspot = React.createClass({
 					top: r[1] * this.props.scale,
 					width: r[2] * this.props.scale,
 					height: r[3] * this.props.scale
-				}} onClick={this.onClickHotspot}>
+				}} onClick={this.onClickHotspot} onDoubleClick={this.onDoubleClickHotspot} onMouseEnter={this.onHoverHotspot}>
 				</div>
 			);
 		} else {
@@ -20,6 +20,24 @@ var Hotspot = React.createClass({
 	},
 
 	onClickHotspot: function () {
-		this.props.advance();
+		if (this.props.trigger == "click") {
+			this.props.onStepComplete(this, true);
+		} else {
+			this.props.onStepHint(this);
+		}
+	},
+
+	onDoubleClickHotspot: function () {
+		if (this.props.trigger == "double-click") {
+			this.props.onStepComplete(this, true);
+		} else {
+			this.props.onStepHint(this);
+		}
+	},
+
+	onHoverHotspot: function () {
+		if (this.props.trigger == "hover") {
+			this.props.onStepComplete(this, true);
+		}
 	}
 });

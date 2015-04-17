@@ -1,13 +1,11 @@
-// TODO: click, double-click, hover
-// TODO: export compressed
-// TODO: export per task
+// TODO: export compressed?
+// TODO: export one file per task (to cut down on file size)
 // TODO: export TOC
-// TODO: save rect as integers
-// TODO: intro paragraph option (doesn't go into Player)
+// TODO: edit one task at a time
+// TODO: intro paragraph option (doesn't go into Player) [or just make the Player smart enough to extract the first "Plain" paragraph?]
 // TODO: re-calculate .priorities after adding/removing rows
 // TODO: figure out why drag/drop doesn't update the children correctly
 // TODO: re-order steps
-// TODO: audio narration
 
 //---------------------------------------------------------------------------------------
 
@@ -23,3 +21,8 @@
 // DONE: add reference #s to all steps (even unnumbered ones)
 // DONE: after loading, set the steps order according to priority
 // DONE: export data (and load into Framework)
+// DONE: audio narration playback button
+// DONE: divider lines between steps
+// DONE: save rect as integers
+// DONE: show a filename for audio
+// DONE: click, double-click, hover

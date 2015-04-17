@@ -96,6 +96,9 @@ body {
     .step-holder .step-text.arrow-right:before {
       border-left-color: white;
       margin-top: -26px; }
+    .step-holder .step-text.hinted {
+      background: linear-gradient(to top, #a23f48 0%, #d31f41 80%, #c6081d 90%, #eea196 100%);
+      transition: background-color .5s ease-in-out; }
   .step-holder .step-image {
     position: absolute;
     width: 100%; }

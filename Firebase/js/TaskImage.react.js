@@ -47,7 +47,7 @@ var Callout = React.createClass({
 	updateRect: function () {
 		var el = $(React.findDOMNode(this)).find(".callout");
 
-		var rect = [el.position().left / this.props.scale, el.position().top / this.props.scale, el.width() / this.props.scale, el.height() / this.props.scale];
+		var rect = [Math.round(el.position().left / this.props.scale), Math.round(el.position().top / this.props.scale), Math.round(el.width() / this.props.scale), Math.round(el.height() / this.props.scale)];
 
 		var ref = this.props.firebaseRefs.child(this.props.firebaseKey);
 

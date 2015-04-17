@@ -19,8 +19,6 @@ var Step = React.createClass({
 	componentDidMount: function () {
 		if (this.refs.myAudio) {
 			var audio = this.refs.myAudio.getDOMNode();
-			console.log("trying");
-			console.log(audio);
 			audio.addEventListener("ended", this.onAudioPlayed);
 		}
 
@@ -40,7 +38,7 @@ var Step = React.createClass({
 	componentWillUnmount: function () {
 		if (this.refs.myAudio) {
 			var audio = this.refs.myAudio.getDOMNode();
-			audio.removeEventListener("onended", this.onAudioPlayed);
+			audio.removeEventListener("ended", this.onAudioPlayed);
 		}
 	},
 
@@ -64,12 +62,14 @@ var Step = React.createClass({
 	playAudio: function () {
 		if (this.props.audio) {
 			var audio = this.refs.myAudio.getDOMNode();
+			audio.currentTime = 0;
 			audio.play();
 		}
 	},
 
 	onAudioPlayed: function () {
-		this.props.advance();
+		if (!this.props.rect)
+			this.props.onStepComplete(this, true);
 	},
 
 	animateText: function () {
@@ -93,7 +93,7 @@ var Step = React.createClass({
 			<div className={classes} onClick={this.onClickStep}>
 				{audio}
 				<img ref="myImage" className="step-image" src={this.props.image}/>
-				<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} advance={this.props.advance}/>
+				<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} onStepComplete={this.props.onStepComplete} onStepHint={this.showHint}/>
 				<p ref="myText" className="step-text">{this.props.text}</p>
 			</div>
 		);
@@ -102,7 +102,9 @@ var Step = React.createClass({
 	onClickStep: function () {
 		// if there is no Hotspot, a click anywhere will advance us
 		if (!this.props.rect) {
-			this.props.advance();
+			this.props.onStepComplete(this, true);
+		} else {
+			this.showHint();
 		}
 	},
 
@@ -152,8 +154,28 @@ var Step = React.createClass({
 			}
 
 			$(txt).position({my: my, at: at, of: hotspot, collision: "fit"}).addClass(arrows);
+
+			this.textDirection = largest;
 		} else {
 			$(txt).position({my: "center center", at: "center center", of: holder, collision: "fit"});
 		}
+	},
+
+	showHint: function () {
+		var animation;
+
+		switch (this.textDirection) {
+			case "left":
+				animation = "fadeInLeft"; break;
+			case "top":
+				animation = "fadeInDown"; break;
+			case "right":
+				animation = "fadeInRight"; break;
+			case "bottom":
+				animation = "fadeInUp"; break;
+		}
+
+		var txt = $(this.refs.myText.getDOMNode());
+		txt.removeClass("animated fadeIn").hide(0).addClass("hinted animated " + animation).show(0);
 	}
 });

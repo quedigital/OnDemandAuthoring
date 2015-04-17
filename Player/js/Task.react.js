@@ -8,7 +8,11 @@ var Task = React.createClass({
 	createStep: function (item, index) {
 		var current = (index == this.state.currentStep);
 
-		return <Step {...item} myKey={index} current={current} key={index} advance={this.doAdvance} onCurrent={this.onCurrentStep}></Step>
+		return <Step {...item} myKey={index} current={current} key={index} onStepComplete={this.onStepComplete} onCurrent={this.onCurrentStep}></Step>
+	},
+
+	componentWillUpdate: function () {
+		this.stopAllAudio();
 	},
 
 	componentDidUpdate: function () {
@@ -23,7 +27,7 @@ var Task = React.createClass({
 		if (this.state.currentStep) {
 			var controls;
 			var step = this.props.steps[this.state.currentStep];
-			if (!step.rect) {
+			if (!step.rect && !step.audio) {
 				controls = (
 					<button id="continue-button" className="btn btn-success" onClick={this.doAdvance}>Continue</button>
 				);
@@ -93,6 +97,12 @@ var Task = React.createClass({
 		}
 	},
 
+	onStepComplete: function (step, advance) {
+		if (advance) {
+			this.doAdvance();
+		}
+	},
+
 	onCurrentStep: function (step) {
 	},
 
@@ -106,5 +116,9 @@ var Task = React.createClass({
 			var text = step.find(".step-text");
 			btn.hide(0).position({ my: "center top+20", at: "center bottom", of: text, collision: "none" }).addClass("animated fadeIn").animate( { _justDelay: 0 }, 1000, function () { btn.show(0); } );
 		}
+	},
+
+	stopAllAudio: function () {
+		$("audio").map(function (index, item) { item.pause(); });
 	}
 });

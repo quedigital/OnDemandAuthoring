@@ -1,7 +1,5 @@
 var PlayerApp = React.createClass({
 	gotData: function (data) {
-		console.log(data);
-
 		if (this.isMounted()) {
 			this.setState({ title: data.title, tasks: data.tasks });
 		}

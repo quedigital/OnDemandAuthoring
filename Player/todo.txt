@@ -1,8 +1,9 @@
 // TODO: watch versus try
-// TODO: narration
-// TODO: hint/error messages
-// TODO: interactivity types (click, double-click, hover, drag and drop, text, no-delay, etc)
-// TODO: cursor?
+// TODO: "watch" mode: cursor
+// TODO: reset "hinted" class (during render? update?)
+// TODO: delay hint in case it's an impending double-click
+// TODO: support iPad for interaction (double-click, hover, etc)
+// TODO: support drag-and-drop, text interaction
 
 //---------------------------------------------------------------------------------------
 
@@ -10,3 +11,7 @@
 // DONE: animate text boxes
 // DONE: animate button
 // DONE: add pointer arrows to callout (library function?)
+// DONE: narration
+// DONE: stop audio when changing steps
+// DONE: hint/error messages
+// DONE: interactivity types (click, double-click, hover, drag and drop, text, no-delay, etc)
