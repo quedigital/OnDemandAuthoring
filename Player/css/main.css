@@ -20,6 +20,10 @@ body {
   height: 100%; }
   .que-task #continue-button {
     position: absolute; }
+  .que-task .cursor {
+    position: absolute;
+    top: 0px;
+    left: 0px; }
 
 .step-holder {
   position: relative;
@@ -105,8 +109,6 @@ body {
   .step-holder .step-hotspot {
     position: absolute;
     border: 5px solid red; }
-  .step-holder .cursor {
-    position: absolute; }
 
 .inviso {
   visibility: hidden; }

@@ -29,6 +29,12 @@ body {
 	#continue-button {
 		position: absolute;
 	}
+
+	.cursor {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+	}
 }
 
 .step-holder {
@@ -154,10 +160,6 @@ body {
 	.step-hotspot {
 		position: absolute;
 		border: 5px solid red;
-	}
-
-	.cursor {
-		position: absolute;
 	}
 }
 
