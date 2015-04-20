@@ -105,6 +105,8 @@ body {
   .step-holder .step-hotspot {
     position: absolute;
     border: 5px solid red; }
+  .step-holder .cursor {
+    position: absolute; }
 
 .inviso {
   visibility: hidden; }

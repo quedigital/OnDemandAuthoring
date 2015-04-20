@@ -8,7 +8,7 @@ var Task = React.createClass({
 	createStep: function (item, index) {
 		var current = (index == this.state.currentStep);
 
-		return <Step {...item} myKey={index} current={current} key={index} onStepComplete={this.onStepComplete} onCurrent={this.onCurrentStep}></Step>
+		return <Step {...item} myKey={index} current={current} key={index} onStepComplete={this.onStepComplete} onCurrent={this.onCurrentStep} mode={this.props.mode}></Step>
 	},
 
 	componentWillUpdate: function () {
@@ -32,6 +32,12 @@ var Task = React.createClass({
 					<button id="continue-button" className="btn btn-success" onClick={this.doAdvance}>Continue</button>
 				);
 			}
+
+			if (this.props.mode == "watch" && step.rect && step.audio) {
+				var cursor = (
+					<Mousetrail key="mouse1"></Mousetrail>
+				);
+			}
 		}
 
 		return (
@@ -40,6 +46,7 @@ var Task = React.createClass({
 					{ $.map(this.props.steps, this.createStep) }
 				</div>
 				{controls}
+				{cursor}
 				<button className="btn btn-primary" onClick={this.onClickPrevStep}>Prev</button>
 				<button className="btn btn-success" onClick={this.onClickNextStep}>Next</button>
 			</div>

@@ -68,8 +68,12 @@ var Step = React.createClass({
 	},
 
 	onAudioPlayed: function () {
-		if (!this.props.rect)
+		if (this.props.mode == "watch") {
 			this.props.onStepComplete(this, true);
+		} else {
+			if (!this.props.rect)
+				this.props.onStepComplete(this, true);
+		}
 	},
 
 	animateText: function () {
@@ -100,11 +104,21 @@ var Step = React.createClass({
 	},
 
 	onClickStep: function () {
-		// if there is no Hotspot, a click anywhere will advance us
-		if (!this.props.rect) {
-			this.props.onStepComplete(this, true);
+		if (this.props.mode == "watch") {
+			if (this.props.audio) {
+				var audio = this.refs.myAudio.getDOMNode();
+				if (audio.paused)
+					audio.play();
+				else
+					audio.pause();
+			}
 		} else {
-			this.showHint();
+			// if there is no Hotspot, a click anywhere will advance us
+			if (!this.props.rect) {
+				this.props.onStepComplete(this, true);
+			} else {
+				this.showHint();
+			}
 		}
 	},
 

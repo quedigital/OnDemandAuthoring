@@ -9,7 +9,8 @@ var PlayerApp = React.createClass({
 		return {
 			title: null,
 			tasks: null,
-			currentTask: "0"
+			currentTask: "0",
+			mode: "watch"
 		};
 	},
 
@@ -31,7 +32,7 @@ var PlayerApp = React.createClass({
 		if (this.state.tasks) {
 			var item = this.state.tasks[this.state.currentTask];
 
-			return <Task {...item} key={this.state.currentTask}></Task>;
+			return <Task {...item} key={this.state.currentTask} mode={this.state.mode}></Task>;
 		} else {
 			return <p>Loading</p>;
 		}
@@ -40,7 +41,6 @@ var PlayerApp = React.createClass({
 	render: function () {
 		return (
 			<div className="que-player">
-				{/*<h1>{this.state.title}</h1>*/}
 				{ this.showCurrentTask() }
 			</div>
 		);
