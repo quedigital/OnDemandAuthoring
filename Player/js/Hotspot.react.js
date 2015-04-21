@@ -1,4 +1,12 @@
 var Hotspot = React.createClass({
+	statics: {
+		getCenterOfRect: function (rect, scale) {
+			var r = rect.split(",");
+
+			return { x: r[0] * scale + r[2] * scale * .5, y: r[1] * scale + r[3] * scale * .5 };
+		}
+	},
+
 	render: function () {
 		var r;
 
@@ -20,6 +28,8 @@ var Hotspot = React.createClass({
 	},
 
 	onClickHotspot: function () {
+		if (this.props.mode == "watch") return;
+
 		if (this.props.trigger == "click") {
 			this.props.onStepComplete(this, true);
 		} else {
@@ -28,6 +38,8 @@ var Hotspot = React.createClass({
 	},
 
 	onDoubleClickHotspot: function () {
+		if (this.props.mode == "watch") return;
+
 		if (this.props.trigger == "double-click") {
 			this.props.onStepComplete(this, true);
 		} else {
@@ -36,6 +48,8 @@ var Hotspot = React.createClass({
 	},
 
 	onHoverHotspot: function () {
+		if (this.props.mode == "watch") return;
+
 		if (this.props.trigger == "hover") {
 			this.props.onStepComplete(this, true);
 		}

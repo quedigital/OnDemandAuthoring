@@ -9,21 +9,15 @@ body {
   height: 600px;
   background: blue;
   position: relative; }
-  .que-player h1, .que-player h2 {
-    position: absolute;
-    margin: 0;
-    z-index: 100;
-    width: 100%;
-    text-align: center; }
 
 .que-task {
   height: 100%; }
   .que-task #continue-button {
     position: absolute; }
-  .que-task .cursor {
+  .que-task .mouse-trail {
     position: absolute;
-    top: 0px;
-    left: 0px; }
+    transform-origin: 10% 10%;
+    z-index: 4; }
 
 .step-holder {
   position: relative;
@@ -108,9 +102,13 @@ body {
     width: 100%; }
   .step-holder .step-hotspot {
     position: absolute;
-    border: 5px solid red; }
+    border: 2px solid mediumblue;
+    background: rgba(55, 104, 255, 0.2); }
 
 .inviso {
   visibility: hidden; }
+
+#watch-button, #try-button {
+  float: right; }
 
 /*# sourceMappingURL=main.css.map */

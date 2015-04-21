@@ -5,10 +5,19 @@ var Task = React.createClass({
 		};
 	},
 
+	// THEORY: storing references to steps here to update our state based on them (bad practice?)
+	onRef: function (param) {
+		this.refList[param.props.myKey] = param;
+	},
+
+	getCurrentStep: function () {
+		return this.refList[this.state.currentStep];
+	},
+
 	createStep: function (item, index) {
 		var current = (index == this.state.currentStep);
 
-		return <Step {...item} myKey={index} current={current} key={index} onStepComplete={this.onStepComplete} onCurrent={this.onCurrentStep} mode={this.props.mode}></Step>
+		return <Step {...item} myKey={index} ref={this.onRef} current={current} key={index} onAudioComplete={this.onAudioComplete} onStepComplete={this.onStepComplete} onCurrent={this.onCurrentStep} mode={this.props.mode} lastMouse={this.lastMouse}></Step>
 	},
 
 	componentWillUpdate: function () {
@@ -17,10 +26,29 @@ var Task = React.createClass({
 
 	componentDidUpdate: function () {
 		this.positionButton();
+
+		this.setupForStep();
+	},
+
+	componentWillMount: function () {
+		this.refList = [];
+
+		// QUESTION: should these be states?
+		this.lastMouse = { x: 0, y: 0 };
+		this.awaitingCursor = false;
+		this.awaitingAudio = false;
+		this.cursorArrived = false;
+		this.audioArrived = false;
 	},
 
 	componentDidMount: function () {
+		var el = $(this.getDOMNode()).find(".step-holder");
+
+		this.lastMouse = { x: el.width() * .5, y: el.height() * .5 };
+
 		this.positionButton();
+
+		this.setupForStep();
 	},
 
 	render: function () {
@@ -32,25 +60,37 @@ var Task = React.createClass({
 					<button id="continue-button" className="btn btn-success" onClick={this.doAdvance}>Continue</button>
 				);
 			}
-
-			if (this.props.mode == "watch" && step.rect && step.audio) {
-				var cursor = (
-					<Mousetrail key="mouse1"></Mousetrail>
-				);
-			}
 		}
+
 
 		return (
 			<div className="que-task">
-				<div className="step-holder">
+				<div className="step-holder" onClick={this.onClickTask}>
 					{ $.map(this.props.steps, this.createStep) }
 				</div>
 				{controls}
-				{cursor}
+				<Mousetrail ref="myMouse"></Mousetrail>
 				<button className="btn btn-primary" onClick={this.onClickPrevStep}>Prev</button>
 				<button className="btn btn-success" onClick={this.onClickNextStep}>Next</button>
+				<audio ref="myClickSound"><source src="sounds/mouseclick.mp3"></source></audio>
 			</div>
 		);
+	},
+
+	onClickTask: function () {
+		if (this.props.mode == "watch") {
+			this.togglePause();
+		}
+	},
+
+	togglePause: function () {
+		var step = this.getCurrentStep();
+		step.togglePause();
+
+		var myMouse = this.refs.myMouse;
+		var cursor = $(myMouse.getDOMNode());
+
+		createjs.Ticker.setPaused(!createjs.Ticker.paused);
 	},
 
 	onClickPrevStep: function () {
@@ -104,6 +144,21 @@ var Task = React.createClass({
 		}
 	},
 
+	onAudioComplete: function (step) {
+		this.audioArrived = true;
+		this.checkForAdvance();
+	},
+
+	onCursorComplete: function () {
+		this.cursorArrived = true;
+		this.checkForAdvance();
+	},
+
+	checkForAdvance: function () {
+		if ( (!this.awaitingAudio || this.audioArrived) && (!this.awaitingCursor || this.cursorArrived) )
+			this.doAdvance();
+	},
+
 	onStepComplete: function (step, advance) {
 		if (advance) {
 			this.doAdvance();
@@ -111,6 +166,49 @@ var Task = React.createClass({
 	},
 
 	onCurrentStep: function (step) {
+	},
+
+	setupForStep: function () {
+		if (this.props.mode == "watch") {
+			var step = this.getCurrentStep();
+
+			if (step && step.props.rect) {
+				var center = Hotspot.getCenterOfRect(step.props.rect, step.state.scale);
+				var myMouse = this.refs.myMouse;
+				var cursor = $(myMouse.getDOMNode());
+
+				var distance = Math.sqrt((center.x - this.lastMouse.x) * (center.x - this.lastMouse.x) + (center.y - this.lastMouse.y) * (center.y - this.lastMouse.y));
+				// THEORY: cursor speed is based on window height
+				var time = Math.max((distance / $(window).height()) * 3000, 1000);
+
+				var delay = Math.max(step.getAudioDuration() - 250, 0);
+
+				if (center.x != this.lastMouse.x || center.y != this.lastMouse.y) {
+					createjs.Tween.get(cursor[0])
+						.set({display: "none"}, cursor[0].style)
+						.wait(delay)
+						.set({display: "block", left: this.lastMouse.x, top: this.lastMouse.y}, cursor[0].style)
+						.to({left: center.x, top: center.y}, time, createjs.Ease.quadInOut)
+						.call(this.doTrigger, null, this);
+
+					this.lastMouse.x = center.x;
+					this.lastMouse.y = center.y;
+				}
+			} else {
+				var cursor = this.refs.myMouse;
+				cursor.hide();
+			}
+
+			if (step) {
+				this.awaitingCursor = step.props.rect != undefined;
+				this.cursorArrived = false;
+				this.awaitingAudio = step.props.audio != undefined;
+				this.audioArrived = false;
+			}
+		} else {
+			var cursor = this.refs.myMouse;
+			cursor.hide();
+		}
 	},
 
 	positionButton: function () {
@@ -127,5 +225,66 @@ var Task = React.createClass({
 
 	stopAllAudio: function () {
 		$("audio").map(function (index, item) { item.pause(); });
+	},
+
+	playClickSound: function () {
+		this.refs.myClickSound.getDOMNode().currentTime = 0;
+		this.refs.myClickSound.getDOMNode().play();
+	},
+
+	doTrigger: function () {
+		var step = this.getCurrentStep();
+		if (step) {
+			switch (step.props.trigger) {
+				case "click":
+					this.clickMouseCursor();
+					break;
+				case "double-click":
+					this.doubleClickMouseCursor();
+					break;
+				case "hover":
+					this.hoverMouseCursor();
+					break;
+			}
+		}
+	},
+
+	clickMouseCursor: function () {
+		var myMouse = this.refs.myMouse;
+		var cursor = $(myMouse.getDOMNode());
+		createjs.Tween.get(cursor[0])
+			.wait(100)
+			.set( { transform: "scale(.7)"}, cursor[0].style )
+			.call(this.playClickSound, null, this)
+			.wait(100)
+			.set( { transform: "scale(1)"}, cursor[0].style )
+			.wait(300)
+			.call(this.onCursorComplete, null, this);
+	},
+
+	doubleClickMouseCursor: function () {
+		var myMouse = this.refs.myMouse;
+		var cursor = $(myMouse.getDOMNode());
+		createjs.Tween.get(cursor[0])
+			.wait(100)
+			.set( { transform: "scale(.7)"}, cursor[0].style )
+			.call(this.playClickSound, null, this)
+			.wait(100)
+			.set( { transform: "scale(1)"}, cursor[0].style )
+			.wait(150)
+			.set( { transform: "scale(.7)"}, cursor[0].style )
+			.call(this.playClickSound, null, this)
+			.wait(100)
+			.set( { transform: "scale(1)"}, cursor[0].style )
+			.wait(300)
+			.call(this.onCursorComplete, null, this);
+	},
+
+	hoverMouseCursor: function () {
+		var myMouse = this.refs.myMouse;
+		var cursor = $(myMouse.getDOMNode());
+		createjs.Tween.get(cursor[0])
+			.wait(300)
+			.call(this.onCursorComplete, null, this);
 	}
 });

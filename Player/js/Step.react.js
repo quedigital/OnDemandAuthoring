@@ -5,6 +5,10 @@ var Step = React.createClass({
 		};
 	},
 
+	onImageLoaded: function () {
+		this.findImageScale();
+	},
+
 	findImageScale: function() {
 		var img = this.refs.myImage.getDOMNode();
 
@@ -23,13 +27,11 @@ var Step = React.createClass({
 		}
 
 		if (this.props.current) {
-			this.findImageScale();
-
 			this.positionText();
 
 			this.props.onCurrent(this);
 
-			this.animateText();
+			this.showTextAndTarget();
 
 			this.playAudio();
 		}
@@ -47,13 +49,11 @@ var Step = React.createClass({
 
 	componentDidUpdate: function () {
 		if (this.props.current) {
-			this.findImageScale();
-
 			this.positionText();
 
 			this.props.onCurrent(this);
 
-			this.animateText();
+			this.showTextAndTarget();
 
 			this.playAudio();
 		}
@@ -69,16 +69,23 @@ var Step = React.createClass({
 
 	onAudioPlayed: function () {
 		if (this.props.mode == "watch") {
-			this.props.onStepComplete(this, true);
+			this.props.onAudioComplete(this);
 		} else {
 			if (!this.props.rect)
-				this.props.onStepComplete(this, true);
+				this.props.onAudioComplete(this);
 		}
 	},
 
-	animateText: function () {
+	showTextAndTarget: function () {
 		var txt = this.refs.myText.getDOMNode();
 		$(txt).hide(0).removeClass("animated").addClass("animated fadeIn").show(0);
+
+		var hotspot = this.refs.myHotspot.getDOMNode();
+		if (this.props.mode == "watch") {
+			$(hotspot).css({ opacity: 1 }).hide(0).removeClass("animated").delay(1500).addClass("animated tada").show(0);
+		} else {
+			$(hotspot).css({ opacity: 0 });
+		}
 	},
 
 	render: function () {
@@ -96,23 +103,15 @@ var Step = React.createClass({
 		return (
 			<div className={classes} onClick={this.onClickStep}>
 				{audio}
-				<img ref="myImage" className="step-image" src={this.props.image}/>
-				<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} onStepComplete={this.props.onStepComplete} onStepHint={this.showHint}/>
+				<img ref="myImage" className="step-image" src={this.props.image} onLoad={this.onImageLoaded}/>
+				<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} mode={this.props.mode} onStepComplete={this.props.onStepComplete} onStepHint={this.showHint}/>
 				<p ref="myText" className="step-text">{this.props.text}</p>
 			</div>
 		);
 	},
 
 	onClickStep: function () {
-		if (this.props.mode == "watch") {
-			if (this.props.audio) {
-				var audio = this.refs.myAudio.getDOMNode();
-				if (audio.paused)
-					audio.play();
-				else
-					audio.pause();
-			}
-		} else {
+		if (this.props.mode == "try") {
 			// if there is no Hotspot, a click anywhere will advance us
 			if (!this.props.rect) {
 				this.props.onStepComplete(this, true);
@@ -191,5 +190,23 @@ var Step = React.createClass({
 
 		var txt = $(this.refs.myText.getDOMNode());
 		txt.removeClass("animated fadeIn").hide(0).addClass("hinted animated " + animation).show(0);
+	},
+
+	togglePause: function () {
+		if (this.props.audio) {
+			var audio = this.refs.myAudio.getDOMNode();
+			if (audio.paused)
+				audio.play();
+			else
+				audio.pause();
+		}
+	},
+
+	getAudioDuration: function () {
+		if (this.props.audio) {
+			var audio = this.refs.myAudio.getDOMNode();
+			return audio.duration * 1000;
+		} else
+			return 0;
 	}
 });

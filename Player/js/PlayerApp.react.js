@@ -10,7 +10,7 @@ var PlayerApp = React.createClass({
 			title: null,
 			tasks: null,
 			currentTask: "0",
-			mode: "watch"
+			mode: "try"//"watch"
 		};
 	},
 
@@ -42,7 +42,17 @@ var PlayerApp = React.createClass({
 		return (
 			<div className="que-player">
 				{ this.showCurrentTask() }
+				<button id="watch-button" className="btn btn-primary" onClick={this.onClickWatch}>Watch</button>
+				<button id="try-button" className="btn btn-success" onClick={this.onClickTry}>Try</button>
 			</div>
 		);
+	},
+
+	onClickWatch: function () {
+		this.setState({ mode: "watch"});
+	},
+
+	onClickTry: function () {
+		this.setState({ mode: "try"});
 	}
 });

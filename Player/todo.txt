@@ -1,7 +1,5 @@
-// TODO: watch versus try
-// TODO: "watch" mode: cursor
-// TODO: reset "hinted" class (during render? update?)
 // TODO: delay hint in case it's an impending double-click
+// TODO: reset "hinted" class (during render? update?)
 // TODO: support iPad for interaction (double-click, hover, etc)
 // TODO: support drag-and-drop, text interaction
 
@@ -15,3 +13,8 @@
 // DONE: stop audio when changing steps
 // DONE: hint/error messages
 // DONE: interactivity types (click, double-click, hover, drag and drop, text, no-delay, etc)
+// DONE: watch versus try
+// DONE: "watch" mode: cursor
+// DONE: "click", "double-click" effect
+// DONE: watch/try buttons
+// DONE: figure out how to style the target boxes
