@@ -1,13 +1,17 @@
 var Task = React.createClass({
 	getInitialState: function () {
+		var initialStep = this.getStepByIndex(0);
+
 		return {
-			currentStep: "0"
+			currentStep: initialStep,
+			finished: false
 		};
 	},
 
 	// THEORY: storing references to steps here to update our state based on them (bad practice?)
 	onRef: function (param) {
-		this.refList[param.props.myKey] = param;
+		if (param)
+			this.refList[param.props.myKey] = param;
 	},
 
 	getCurrentStep: function () {
@@ -15,9 +19,9 @@ var Task = React.createClass({
 	},
 
 	createStep: function (item, index) {
-		var current = (index == this.state.currentStep);
+		var current = (index == this.state.currentStep) && (!this.state.finished);
 
-		return <Step {...item} myKey={index} ref={this.onRef} current={current} key={index} onAudioComplete={this.onAudioComplete} onStepComplete={this.onStepComplete} onCurrent={this.onCurrentStep} mode={this.props.mode} lastMouse={this.lastMouse}></Step>
+		return <Step {...item} myKey={index} ref={this.onRef} current={current} key={index} onAudioComplete={this.onAudioComplete} onStepComplete={this.onStepComplete} onCurrent={this.onCurrentStep} mode={this.props.mode} lastMouse={this.lastMouse} started={this.props.started} finished={this.state.finished}></Step>
 	},
 
 	componentWillUpdate: function () {
@@ -62,6 +66,14 @@ var Task = React.createClass({
 			}
 		}
 
+		var hide = this.state.finished;
+
+		var repeat_button;
+		if (this.state.finished) {
+			repeat_button = (
+				<button id="repeat-button" className="btn" onClick={this.onClickRepeat}><i className="fa fa-3x fa-repeat"></i></button>
+			)
+		}
 
 		return (
 			<div className="que-task">
@@ -69,9 +81,10 @@ var Task = React.createClass({
 					{ $.map(this.props.steps, this.createStep) }
 				</div>
 				{controls}
-				<Mousetrail ref="myMouse"></Mousetrail>
+				<Mousetrail hidden={hide} ref="myMouse"></Mousetrail>
 				<button className="btn btn-primary" onClick={this.onClickPrevStep}>Prev</button>
 				<button className="btn btn-success" onClick={this.onClickNextStep}>Next</button>
+				{repeat_button}
 				<audio ref="myClickSound"><source src="sounds/mouseclick.mp3"></source></audio>
 			</div>
 		);
@@ -79,18 +92,31 @@ var Task = React.createClass({
 
 	onClickTask: function () {
 		if (this.props.mode == "watch") {
-			this.togglePause();
+			this.props.onTogglePause();
 		}
 	},
 
-	togglePause: function () {
+	onClickRepeat: function () {
+		var step = this.getStepByIndex(0);
+		if (step) {
+			this.setState({ finished: false, currentStep: step });
+		}
+	},
+
+	pause: function () {
 		var step = this.getCurrentStep();
-		step.togglePause();
+		if (step)
+			step.pause();
 
-		var myMouse = this.refs.myMouse;
-		var cursor = $(myMouse.getDOMNode());
+		createjs.Ticker.setPaused(true);
+	},
 
-		createjs.Ticker.setPaused(!createjs.Ticker.paused);
+	resume: function () {
+		var step = this.getCurrentStep();
+		if (step)
+			step.resume();
+
+		createjs.Ticker.setPaused(false);
 	},
 
 	onClickPrevStep: function () {
@@ -126,7 +152,13 @@ var Task = React.createClass({
 		return null;
 	},
 
+	getCurrentStepIndex: function () {
+		return this.getIndexOfStep(this.state.currentStep);
+	},
+
 	doRewind: function () {
+		createjs.Tween.removeAllTweens();
+
 		var currentIndex = this.getIndexOfStep(this.state.currentStep);
 		if (currentIndex > 0) {
 			var prevStep = this.getStepByIndex(currentIndex - 1);
@@ -136,11 +168,16 @@ var Task = React.createClass({
 	},
 
 	doAdvance: function () {
+		createjs.Tween.removeAllTweens();
+
 		var currentIndex = this.getIndexOfStep(this.state.currentStep);
-		if (currentIndex < this.getNumberOfSteps()) {
+		if (currentIndex < this.getNumberOfSteps() - 1) {
 			var nextStep = this.getStepByIndex(currentIndex + 1);
 
 			this.setState({currentStep: nextStep});
+		} else {
+			this.props.onComplete();
+			this.setState({finished: true});
 		}
 	},
 
@@ -206,8 +243,10 @@ var Task = React.createClass({
 				this.audioArrived = false;
 			}
 		} else {
-			var cursor = this.refs.myMouse;
-			cursor.hide();
+			if (this.refs.myMouse) {
+				var cursor = this.refs.myMouse;
+				cursor.hide();
+			}
 		}
 	},
 
@@ -220,6 +259,11 @@ var Task = React.createClass({
 		if (btn.length) {
 			var text = step.find(".step-text");
 			btn.hide(0).position({ my: "center top+20", at: "center bottom", of: text, collision: "none" }).addClass("animated fadeIn").animate( { _justDelay: 0 }, 1000, function () { btn.show(0); } );
+		}
+
+		btn = el.find("#repeat-button");
+		if (btn.length) {
+			btn.position({ my: "center top", at: "center center+50", of: el, collision: "none" });
 		}
 	},
 

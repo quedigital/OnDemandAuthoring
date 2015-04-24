@@ -1,18 +1,18 @@
 var Mousetrail = React.createClass({
-	componentDidMount: function () {
-		//this.animateToRect();
-	},
-
-	componentDidUpdate: function () {
-		//this.animateToRect();
-	},
-
 	render: function () {
-		return (
-			<div className="mouse-trail">
-				<img ref="myImg" className="cursor" src="images/cursor_arrow_white.png"/>
-			</div>
-		);
+		if (this.props.hidden) {
+			return (
+				<div className="mouse-trail inviso">
+					<img ref="myImg" className="cursor" src="images/cursor_arrow_white.png"/>
+				</div>
+			);
+		} else {
+			return (
+				<div className="mouse-trail">
+					<img ref="myImg" className="cursor" src="images/cursor_arrow_white.png"/>
+				</div>
+			);
+		}
 	},
 
 	hide: function () {

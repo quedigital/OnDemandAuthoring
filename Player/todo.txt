@@ -1,5 +1,4 @@
 // TODO: delay hint in case it's an impending double-click
-// TODO: reset "hinted" class (during render? update?)
 // TODO: support iPad for interaction (double-click, hover, etc)
 // TODO: support drag-and-drop, text interaction
 
@@ -18,3 +17,7 @@
 // DONE: "click", "double-click" effect
 // DONE: watch/try buttons
 // DONE: figure out how to style the target boxes
+// DONE: end of lesson screen (fade out?)
+// DONE: reset "hinted" class (during render? update?)
+// DONE: click Prev/Next leaves tweens running?
+// DONE: Hotspot and Mousetrail aren't always initialized with the correct scale [changed Step.didUpdate; maybe that fixed it?]

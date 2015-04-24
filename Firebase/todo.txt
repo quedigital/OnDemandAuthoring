@@ -1,6 +1,8 @@
+// TODO: export html version too
+// TODO: export TOC
+// TODO: export a zipfile of all tasks?
 // TODO: export compressed?
 // TODO: export one file per task (to cut down on file size)
-// TODO: export TOC
 // TODO: edit one task at a time
 // TODO: intro paragraph option (doesn't go into Player) [or just make the Player smart enough to extract the first "Plain" paragraph?]
 // TODO: re-calculate .priorities after adding/removing rows

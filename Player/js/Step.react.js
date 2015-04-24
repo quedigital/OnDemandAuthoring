@@ -6,7 +6,7 @@ var Step = React.createClass({
 	},
 
 	onImageLoaded: function () {
-		this.findImageScale();
+		//this.findImageScale();
 	},
 
 	findImageScale: function() {
@@ -26,15 +26,21 @@ var Step = React.createClass({
 			audio.addEventListener("ended", this.onAudioPlayed);
 		}
 
+		this.findImageScale();
+
 		if (this.props.current) {
 			this.positionText();
 
 			this.props.onCurrent(this);
 
-			this.showTextAndTarget();
+			if (this.props.started) {
+				this.showTextAndTarget();
 
-			this.playAudio();
+				this.playAudio();
+			}
 		}
+
+		this.complete = false;
 	},
 
 	componentWillUnmount: function () {
@@ -45,18 +51,31 @@ var Step = React.createClass({
 	},
 
 	componentWillUpdate: function () {
+		if (this.props.finished) {
+			// reset the audio so it will play and pause again
+			if (this.props.audio) {
+				var audio = this.refs.myAudio.getDOMNode();
+				audio.currentTime = 0;
+			}
+		}
 	},
 
 	componentDidUpdate: function () {
-		if (this.props.current) {
-			this.positionText();
+		this.findImageScale();
 
+		this.positionText();
+
+		if (this.props.current) {
 			this.props.onCurrent(this);
 
-			this.showTextAndTarget();
+			if (this.props.started) {
+				this.showTextAndTarget();
 
-			this.playAudio();
+				this.playAudio();
+			}
 		}
+
+		this.complete = false;
 	},
 
 	playAudio: function () {
@@ -77,21 +96,26 @@ var Step = React.createClass({
 	},
 
 	showTextAndTarget: function () {
-		var txt = this.refs.myText.getDOMNode();
-		$(txt).hide(0).removeClass("animated").addClass("animated fadeIn").show(0);
+		if (this.refs.myText) {
+			var txt = this.refs.myText.getDOMNode();
+			// NOTE: React was leaving some old classes around
+			$(txt).hide(0).removeClass("inviso animated hinted fadeInLeft fadeInRight fadeInDown fadeInUp").addClass("animated fadeIn").show(0);
+		}
 
-		var hotspot = this.refs.myHotspot.getDOMNode();
-		if (this.props.mode == "watch") {
-			$(hotspot).css({ opacity: 1 }).hide(0).removeClass("animated").delay(1500).addClass("animated tada").show(0);
-		} else {
-			$(hotspot).css({ opacity: 0 });
+		if (this.refs.myHotspot) {
+			var hotspot = this.refs.myHotspot.getDOMNode();
+			if (this.props.mode == "watch") {
+				$(hotspot).css({opacity: 1}).hide(0).removeClass("animated").delay(1500).addClass("animated tada").show(0);
+			} else {
+				$(hotspot).css({opacity: 0});
+			}
 		}
 	},
 
 	render: function () {
 		var classes = "step";
 
-		if (!this.props.current)
+		if (!this.props.current || this.props.finished)
 			classes += " inviso";
 		else
 			classes += " current";
@@ -104,18 +128,25 @@ var Step = React.createClass({
 			<div className={classes} onClick={this.onClickStep}>
 				{audio}
 				<img ref="myImage" className="step-image" src={this.props.image} onLoad={this.onImageLoaded}/>
-				<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} mode={this.props.mode} onStepComplete={this.props.onStepComplete} onStepHint={this.showHint}/>
-				<p ref="myText" className="step-text">{this.props.text}</p>
+				<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} mode={this.props.mode} onStepComplete={this.onStepComplete} onStepHint={this.showHint}/>
+				<p ref="myText" className="step-text inviso">{this.props.text}</p>
 			</div>
 		);
 	},
 
-	onClickStep: function () {
+	onStepComplete: function (step, advance) {
+		this.complete = true;
+
+		if (this.props.onStepComplete)
+			this.props.onStepComplete(step, advance);
+	},
+
+	onClickStep: function (event) {
 		if (this.props.mode == "try") {
 			// if there is no Hotspot, a click anywhere will advance us
 			if (!this.props.rect) {
 				this.props.onStepComplete(this, true);
-			} else {
+			} else if (!this.complete) {
 				this.showHint();
 			}
 		}
@@ -123,6 +154,8 @@ var Step = React.createClass({
 
 	positionText: function () {
 		var self = this;
+
+		if (!this.refs.myText) return;
 
 		var txt = this.refs.myText.getDOMNode();
 
@@ -166,7 +199,7 @@ var Step = React.createClass({
 					my = "center top+20"; at = "center bottom"; arrows = "arrow arrow-top"; break;
 			}
 
-			$(txt).position({my: my, at: at, of: hotspot, collision: "fit"}).addClass(arrows);
+			$(txt).removeClass("arrow-right arrow-bottom arrow-left arrow-top").position({my: my, at: at, of: hotspot, collision: "fit"}).addClass(arrows);
 
 			this.textDirection = largest;
 		} else {
@@ -192,13 +225,19 @@ var Step = React.createClass({
 		txt.removeClass("animated fadeIn").hide(0).addClass("hinted animated " + animation).show(0);
 	},
 
-	togglePause: function () {
+	pause: function () {
 		if (this.props.audio) {
 			var audio = this.refs.myAudio.getDOMNode();
-			if (audio.paused)
+			audio.pause();
+		}
+	},
+
+	resume: function () {
+		if (this.props.audio) {
+			var audio = this.refs.myAudio.getDOMNode();
+			if (audio.paused && !audio.ended) {
 				audio.play();
-			else
-				audio.pause();
+			}
 		}
 	},
 
