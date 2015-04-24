@@ -7,6 +7,13 @@ function download (content, filename, contentType) {
 	a.click();
 }
 
+// TODO: get rid of spaces and odd characters
+function convertToFilename (key) {
+	var s = key.replace(" ", "_");
+	return s.toLowerCase();
+}
+
+
 var TutorialApp = React.createClass({
 	mixins: [ReactFireMixin],
 
@@ -86,13 +93,60 @@ var TutorialApp = React.createClass({
 	onClickPublish: function (event) {
 		event.preventDefault();
 
-		console.log("PUBLISH!");
+		this.publishHTML();
 
-		var json = $.toJSON(this.state.tutorial);
-		download(json, "que-interactive.txt");
+		//var json = $.toJSON(this.state.tutorial);
+		//download(json, "que-interactive.txt");
 	},
 
 	onClickLogin: function (event) {
 		event.preventDefault();
+	},
+
+	publishHTML: function () {
+		var project = this.state.tutorial;
+
+		var project_name = convertToFilename(project.title);
+
+		var zip = new JSZip();
+
+		var project_folder = zip.folder(project_name)
+		var pages = project_folder.folder("pages");
+
+		for (task_key in project.tasks) {
+			var s = "";
+			var counter = 1;
+
+			var task = project.tasks[task_key];
+			var filename = convertToFilename(task_key) + ".html";
+
+			s += "<h2>" + task.title + "</h2>\n";
+
+			for (step_key in task.steps) {
+				var step = task.steps[step_key];
+
+				s += "<div class=\"step\">\n";
+
+				switch (step.type) {
+					case "plain":
+						break;
+					case "numbered":
+						s += "\t<div class=\"number\"><span>" + counter++ + "</span></div>\n";
+						break;
+				}
+
+				s += "\t<p>" + step.text + "</p>\n";
+
+				s += "</div>\n";
+			}
+
+			pages.file(filename, s);
+		}
+
+		var zipcontent = zip.generate({ type:"blob" });
+
+		var project_filename = project_name + ".zip";
+
+		download(zipcontent, project_filename);
 	}
 });

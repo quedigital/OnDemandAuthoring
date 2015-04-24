@@ -4,6 +4,9 @@
 // TODO: export compressed?
 // TODO: export one file per task (to cut down on file size)
 // TODO: edit one task at a time
+// TODO: bold, italic, etc. in editor?
+// TODO: inline images in editor?
+// TODO: multi-part steps?
 // TODO: intro paragraph option (doesn't go into Player) [or just make the Player smart enough to extract the first "Plain" paragraph?]
 // TODO: re-calculate .priorities after adding/removing rows
 // TODO: figure out why drag/drop doesn't update the children correctly
