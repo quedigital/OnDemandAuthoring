@@ -1,17 +1,7 @@
-$.urlParam = function(name){
-	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-	if (results==null){
-		return null;
-	}
-	else{
-		return results[1] || 0;
-	}
-}
-
 var PlayerApp = React.createClass({
 	gotData: function (data) {
 		if (this.isMounted()) {
-			this.setState({ title: data.title, tasks: data.tasks });
+			this.setState({ title: data.title, steps: data.steps });
 		}
 	},
 
@@ -21,17 +11,15 @@ var PlayerApp = React.createClass({
 
 		return {
 			title: null,
-			tasks: null,
-			currentTask: "0",
 			mode: mode,
 			started: false
 		};
 	},
 
 	componentDidMount: function () {
-		this.taskRefs = [];
+		var path = "../../Prototype1.5/" + this.props.source;
 
-		var json = $.getJSON("que-interactive.txt", this.gotData);
+		var json = $.getJSON(path, this.gotData);
 
 		// Captivate emulator
 		window.cpAPIInterface = this;
@@ -72,15 +60,18 @@ var PlayerApp = React.createClass({
 		return <Task {...item} key={index}></Task>
 	},
 
-	onRef: function (task) {
-		this.taskRefs[task.props.myKey] = task;
-	},
-
 	showCurrentTask: function () {
-		if (this.state.tasks) {
-			var item = this.state.tasks[this.state.currentTask];
+		if (this.state.steps) {
+			var item = this.state;
 
-			return <Task {...item} ref={this.onRef} myKey={this.state.currentTask} key={this.state.currentTask} mode={this.state.mode} onComplete={this.onTaskComplete} onTogglePause={this.onTogglePause} started={this.state.started}></Task>;
+			return <Task {...item} ref="myTask"
+				myKey={this.state.currentTask}
+				key={this.state.currentTask}
+				mode={this.state.mode}
+				onComplete={this.onTaskComplete}
+				onCurrent={this.onCurrentStep}
+				onTogglePause={this.onTogglePause}
+				started={this.state.started}></Task>;
 		} else {
 			return <p>Loading</p>;
 		}
@@ -98,6 +89,12 @@ var PlayerApp = React.createClass({
 		this.trigger("QUE_COMPLETE");
 	},
 
+	onCurrentStep: function (step_key) {
+		var params = { key: step_key };
+
+		this.trigger("CPAPI_SLIDEENTER", params);
+	},
+
 	onTogglePause: function () {
 		if (this.paused) {
 			this.play();
@@ -106,11 +103,11 @@ var PlayerApp = React.createClass({
 		}
 	},
 
-	trigger: function (event) {
+	trigger: function (event, params) {
 		for (var i = 0; i < this.listeners.length; i++) {
 			var l = this.listeners[i];
 			if (l.event == event) {
-				l.callback(event);
+				l.callback(params);
 			}
 		}
 	},
@@ -118,9 +115,8 @@ var PlayerApp = React.createClass({
 	// **** Captivate emulation:
 
 	pause: function () {
-		var task = this.taskRefs[this.state.currentTask];
-		if (task) {
-			task.pause();
+		if (this.refs.myTask) {
+			this.refs.myTask.pause();
 		}
 
 		this.paused = true;
@@ -131,9 +127,8 @@ var PlayerApp = React.createClass({
 	},
 
 	play: function () {
-		var task = this.taskRefs[this.state.currentTask];
-		if (task) {
-			task.resume();
+		if (this.refs.myTask) {
+			this.refs.myTask.resume();
 		}
 
 		this.paused = false;
@@ -144,18 +139,16 @@ var PlayerApp = React.createClass({
 	},
 
 	getCurrentSlideIndex: function ()  {
-		var task = this.taskRefs[this.state.currentTask];
-		if (task) {
-			return task.getCurrentStepIndex();
+		if (this.refs.myTask) {
+			return this.refs.myTask.getCurrentStepIndex();
 		}
 
 		return undefined;
 	},
 
 	getNumberOfSlides: function () {
-		var task = this.taskRefs[this.state.currentTask];
-		if (task) {
-			return task.getNumberOfSteps();
+		if (this.refs.myTask) {
+			return this.refs.myTask.getNumberOfSteps();
 		}
 
 		return undefined;

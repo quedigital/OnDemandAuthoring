@@ -203,6 +203,9 @@ var Task = React.createClass({
 	},
 
 	onCurrentStep: function (step) {
+		if (this.props.onCurrent) {
+			this.props.onCurrent(step.props.myKey);
+		}
 	},
 
 	setupForStep: function () {

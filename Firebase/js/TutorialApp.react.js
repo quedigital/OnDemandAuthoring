@@ -93,17 +93,14 @@ var TutorialApp = React.createClass({
 	onClickPublish: function (event) {
 		event.preventDefault();
 
-		this.publishHTML();
-
-		//var json = $.toJSON(this.state.tutorial);
-		//download(json, "que-interactive.txt");
+		this.publishPackage();
 	},
 
 	onClickLogin: function (event) {
 		event.preventDefault();
 	},
 
-	publishHTML: function () {
+	publishPackage: function () {
 		var project = this.state.tutorial;
 
 		var project_name = convertToFilename(project.title);
@@ -111,6 +108,107 @@ var TutorialApp = React.createClass({
 		var zip = new JSZip();
 
 		var project_folder = zip.folder(project_name)
+
+		this.publishTOC(project_folder, project_name);
+		this.publishHTML(project_folder);
+		this.publishTasks(project_folder);
+
+		var zipcontent = zip.generate({ type:"blob" });
+
+		var project_filename = project_name + ".zip";
+
+		download(zipcontent, project_filename);
+	},
+
+	publishTOC: function (project_folder, project_name) {
+		var project = this.state.tutorial;
+
+		var toc_file = project_folder.file("toc-data.js");
+
+		var s = "";
+
+		s += "define(function () {\n" +
+			"\tvar toc = [\n";
+
+		for (task_key in project.tasks) {
+			var task = project.tasks[task_key];
+
+			var datafile_path = encodeURI(project_name + "/tasks/" + task_key + ".json");
+
+			var keys = "\t\t\t\tkeys: [\n";
+
+			var counter = 1;
+			for (var step_key in task.steps) {
+				var step = task.steps[step_key];
+
+				keys += "\t\t\t\t\t{ index: " + counter + ", key: \"" + step_key + "\" },\n";
+
+				counter++;
+			}
+
+			keys += "\t\t\t\t],\n";
+
+			s += "\t\t{\n" +
+				"\t\t\ttitle: \"" + task.title + "\",\n" +
+				"\t\t\thtml: \"" + project_name + "/pages/" + task_key + ".html\",\n" +
+				'\t\t\t"watch": {\n' +
+				'\t\t\t\tparams: "datafile=' + datafile_path + '&mode=watch",\n' +
+				'\t\t\t\tcompleted: false,\n' +
+				keys +
+				'\t\t\t},\n' +
+				'\t\t\t"try": {\n' +
+				'\t\t\t\tparams: "datafile=' + datafile_path + '&mode=try",\n' +
+				'\t\t\t\tcompleted: false,\n' +
+				keys +
+				'\t\t\t},\n' +
+				"\t\t},\n";
+		}
+
+		s += "\t];\n" +
+			"\treturn toc;\n" +
+			"});";
+
+		var toc_file = project_folder.file("toc-data.js", s);
+
+		/*
+			"	{\n" +
+			'		title: "Player Test Google 1",'
+					html: "google_hangouts/pages/0.html",
+					"watch": {
+						html: "/Authoring/Player/index.html?mode=watch",
+						completed: false,
+						keys: [
+							{ slide: 1, step: 1 },
+							{ slide: 2, step: 2 },
+							{ slide: 3, step: 3, sub: "#part1" },
+							{ slide: 4, step: 3, sub: "#part2" },
+							{ slide: 5, step: 3, sub: "#part3" },
+							{ slide: 6, step: 4 },
+							{ slide: 7, step: 5 },
+						]
+					},
+					"try": {
+						html: "/Authoring/Player/index.html?mode=try",
+						completed: false,
+						keys: [
+							{ slide: 1, step: 1 },
+							{ slide: 2, step: 2 },
+							{ slide: 3, step: 3, sub: "#part1" },
+							{ slide: 4, step: 3, sub: "#part2" },
+							{ slide: 5, step: 3, sub: "#part3" },
+							{ slide: 6, step: 4 },
+							{ slide: 7, step: 5 },
+						]
+					}
+				},
+			];
+			*/
+
+	},
+
+	publishHTML: function (project_folder) {
+		var project = this.state.tutorial;
+
 		var pages = project_folder.folder("pages");
 
 		for (task_key in project.tasks) {
@@ -125,7 +223,7 @@ var TutorialApp = React.createClass({
 			for (step_key in task.steps) {
 				var step = task.steps[step_key];
 
-				s += "<div class=\"step\">\n";
+				s += "<div class=\"step\" data-key=\"" + step_key + "\">\n";
 
 				switch (step.type) {
 					case "plain":
@@ -142,11 +240,20 @@ var TutorialApp = React.createClass({
 
 			pages.file(filename, s);
 		}
+	},
 
-		var zipcontent = zip.generate({ type:"blob" });
+	publishTasks: function (project_folder) {
+		var project = this.state.tutorial;
 
-		var project_filename = project_name + ".zip";
+		var tasks = project_folder.folder("tasks");
 
-		download(zipcontent, project_filename);
+		for (task_key in project.tasks) {
+			var task = project.tasks[task_key];
+			var filename = convertToFilename(task_key) + ".json";
+
+			var json = $.toJSON(task);
+
+			tasks.file(filename, json);
+		}
 	}
 });

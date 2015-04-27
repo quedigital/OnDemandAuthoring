@@ -1,8 +1,3 @@
-// TODO: export html version too
-// TODO: export TOC
-// TODO: export a zipfile of all tasks?
-// TODO: export compressed?
-// TODO: export one file per task (to cut down on file size)
 // TODO: edit one task at a time
 // TODO: bold, italic, etc. in editor?
 // TODO: inline images in editor?
@@ -31,3 +26,8 @@
 // DONE: save rect as integers
 // DONE: show a filename for audio
 // DONE: click, double-click, hover
+// DONE: export html version too
+// DONE: export TOC
+// DONE: export a zipfile of all tasks?
+// TODONT: export compressed?
+// DONE: export one file per task (to cut down on file size)
