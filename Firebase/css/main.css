@@ -86,4 +86,22 @@ body {
 .bottom-gap {
   margin-bottom: 10px; }
 
+.lib-container {
+  background-color: #bed7c5;
+  max-height: 500px;
+  overflow-y: scroll; }
+
+.library-image {
+  display: inline-block;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid black;
+  margin: 5px;
+  transition: background-color .25s ease-in-out; }
+  .library-image:hover {
+    background-color: #17c633; }
+  .library-image input {
+    margin-top: 5px;
+    width: 8em; }
+
 /*# sourceMappingURL=main.css.map */

@@ -13,6 +13,30 @@ function convertToFilename (key) {
 	return s.toLowerCase();
 }
 
+function getImageDataForShortcut (images, ref) {
+	return images[ref];
+}
+
+function convertMarkdownToHTML (markdown, options) {
+	var renderer = new marked.Renderer();
+
+	renderer.image = function (href, title, text) {
+		return '<span class="imageRef ' + href + '"></span>';
+	};
+
+	marked.setOptions({
+		renderer: renderer,
+		gfm: true,
+		tables: true,
+		breaks: false,
+		pedantic: false,
+		sanitize: true,
+		smartLists: true,
+		smartypants: false
+	});
+
+	return marked(markdown);
+}
 
 var TutorialApp = React.createClass({
 	mixins: [ReactFireMixin],
@@ -65,7 +89,7 @@ var TutorialApp = React.createClass({
 								<ul className="dropdown-menu" role="menu">
 									<li><a href="#" onClick={ this.onClickShowImages } id="show-images"><i className="fa fa-check"/> Show Images</a></li>
 									<li className="divider"></li>
-									<li><a href="#">Separated link</a></li>
+									<li><a href="#" data-toggle="modal" data-target="#imageLibraryModal">Image Library</a></li>
 								</ul>
 							</li>
 							<li><a href="#" onClick={ this.onClickPublish }>Publish</a></li>
@@ -79,6 +103,7 @@ var TutorialApp = React.createClass({
 				<div id="mainContainer" className="container">
 					<Tutorial {...this.state.tutorial} showImages={this.state.showImages} firebaseRefs={ this.firebaseRefs.tutorial }/>
 				</div>
+
 			</div>
 		);
 	},
@@ -110,6 +135,7 @@ var TutorialApp = React.createClass({
 		var project_folder = zip.folder(project_name)
 
 		this.publishTOC(project_folder, project_name);
+		this.publishImageCSS(project_folder);
 		this.publishHTML(project_folder);
 		this.publishTasks(project_folder);
 
@@ -206,6 +232,30 @@ var TutorialApp = React.createClass({
 
 	},
 
+	publishImageCSS: function (project_folder) {
+		var project = this.state.tutorial;
+
+		var pages = project_folder.folder("pages");
+
+		var filename = "images.css";
+
+		var s = "";
+
+		for (image_key in project.images) {
+			var imageData = getImageDataForShortcut(project.images, image_key);
+			var img = $("<img>", { src: imageData } );
+			var w = img[0].naturalWidth, h = img[0].naturalHeight;
+			s += "span.imageRef." + image_key + " {\n";
+			s += "\twidth: " + w + "px;\n";
+			s += "\theight: " + h + "px;\n";
+			s += "\tdisplay: inline-block;\n";
+			s += "\tbackground-image: url(" + imageData + ");\n";
+			s += "}\n";
+		}
+
+		pages.file(filename, s);
+	},
+
 	publishHTML: function (project_folder) {
 		var project = this.state.tutorial;
 
@@ -233,7 +283,9 @@ var TutorialApp = React.createClass({
 						break;
 				}
 
-				s += "\t<p>" + step.text + "</p>\n";
+				var html = convertMarkdownToHTML(step.text, { images: project.images } );
+
+				s += "\t" + html;
 
 				s += "</div>\n";
 			}
@@ -251,7 +303,14 @@ var TutorialApp = React.createClass({
 			var task = project.tasks[task_key];
 			var filename = convertToFilename(task_key) + ".json";
 
-			var json = $.toJSON(task);
+			var taskCopy = jQuery.extend(true, {}, task);
+
+			for (var step_key in taskCopy.steps) {
+				var step = taskCopy.steps[step_key];
+				step.text = convertMarkdownToHTML(step.text, { images: project.images } );
+			}
+
+			var json = $.toJSON(taskCopy);
 
 			tasks.file(filename, json);
 		}

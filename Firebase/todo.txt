@@ -1,6 +1,4 @@
-// TODO: edit one task at a time
-// TODO: bold, italic, etc. in editor?
-// TODO: inline images in editor?
+// TODO: size editor textbox to fit
 // TODO: multi-part steps?
 // TODO: intro paragraph option (doesn't go into Player) [or just make the Player smart enough to extract the first "Plain" paragraph?]
 // TODO: re-calculate .priorities after adding/removing rows
@@ -31,3 +29,6 @@
 // DONE: export a zipfile of all tasks?
 // TODONT: export compressed?
 // DONE: export one file per task (to cut down on file size)
+// DONE: bold, italic, etc. in editor? [Markdown]
+// DONE: edit one task at a time
+// DONE: inline images in editor?

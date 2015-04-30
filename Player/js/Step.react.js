@@ -124,12 +124,14 @@ var Step = React.createClass({
 		if (this.props.audio)
 			audio = <audio ref="myAudio"><source src={this.props.audio}></source></audio>;
 
+		function createMarkup (html) { return { __html: $(html).html() }; };
+
 		return (
 			<div className={classes} onClick={this.onClickStep}>
 				{audio}
 				<img ref="myImage" className="step-image" src={this.props.image} onLoad={this.onImageLoaded}/>
 				<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} mode={this.props.mode} onStepComplete={this.onStepComplete} onStepHint={this.showHint}/>
-				<p ref="myText" className="step-text inviso">{this.props.text}</p>
+				<p ref="myText" className="step-text inviso" dangerouslySetInnerHTML={createMarkup(this.props.text)}></p>
 			</div>
 		);
 	},

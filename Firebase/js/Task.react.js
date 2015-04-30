@@ -57,8 +57,6 @@ var Task = React.createClass({
 		var priorities = this.getStepsByPriority();
 
 		var createStep = function (item, key) {
-			console.log(item.key);
-
 			var newFirebaseKey = self.props.firebaseKey + "/steps/" + item.key;
 
 			var step = self.props.steps[item.key];
@@ -72,20 +70,12 @@ var Task = React.createClass({
 
 		return (
 			<div className="task panel panel-default">
-				<div className="panel-heading" role="tab" id="headingOne">
-					<div className="input-group input-group-lg">
-						<span className="input-group-btn">
-							<button type="button" className="btn btn-default collapsed" data-toggle="collapse" data-parent="#accordion" href={"#collapse" + this.props.id}>Task</button>
-						</span>
-						<input type="text" className="form-control" placeholder="title" value={this.props.title} onChange={ this.onChange }></input>
-					</div>
+				<div className="panel-heading" role="tab">
+					<input type="text" className="form-control input-lg" placeholder="title" value={this.props.title} onChange={ this.onChange }></input>
 				</div>
-				<div className="steps-panel panel-collapse collapse" role="tabpanel" id={ "collapse" + this.props.id }>
+				<div className="steps-panel" role="tabpanel">
 					{ $.map(priorities, createStep) }
 					<div className="panel-footer">
-					{/*
-						<button className="btn btn-info" onClick={ this.onClickAddStep }>Add Step</button>
-					*/}
 					</div>
 				</div>
 			</div>

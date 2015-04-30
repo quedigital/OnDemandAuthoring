@@ -25,3 +25,4 @@
 // DONE: Hotspot and Mousetrail aren't always initialized with the correct scale [changed Step.didUpdate; maybe that fixed it?]
 // DONE: don't hard-code path for loading player data
 // DONE: trigger step notifications (for the Framework highlighting)
+// DONE: convert Markdown for steps

@@ -5,13 +5,40 @@ var Tutorial = React.createClass({
 		}
 	},
 
-	render: function () {
-		var self = this;
+	getInitialState: function () {
+		return { currentTask: undefined };
+	},
 
-		var createTask = function (task, key) {
+	componentDidMount: function () {
+		this.sizeListToFit();
+	},
+
+	componentDidUpdate: function () {
+		this.sizeListToFit();
+	},
+
+	sizeListToFit: function () {
+		var el = $(this.getDOMNode());
+
+		var list = el.find("#task-list");
+
+		list.attr("size", parseInt(list.find("option").length));
+
+		list.val(this.state.currentTask);
+	},
+
+	showCurrentTask: function () {
+		if (this.state && this.state.currentTask) {
+			var task = this.props.tasks[this.state.currentTask];
+			var key = this.state.currentTask;
 			var newFirebaseKey = "tasks/" + key;
+			return <Task {...task} key={key} id={key} firebaseRefs={ this.props.firebaseRefs } firebaseKey={ newFirebaseKey } />
+		}
+	},
 
-			return <Task {...task} key={key} id={key} firebaseRefs={ self.props.firebaseRefs } firebaseKey={ newFirebaseKey } />
+	render: function () {
+		var createTaskEntry = function (task, key) {
+			return <option key={key} value={key}>{task.title}</option>
 		};
 
 		return (
@@ -22,9 +49,17 @@ var Tutorial = React.createClass({
 					</div>
 					<input type="text" className="form-control input-lg" value={this.props.title} placeholder="Tutorial Title" onChange={ this.onChange }></input>
 				</div>
-				<div className="panel-group" id="accordion" role="tablist">
-					{ $.map(this.props.tasks, createTask) }
+				<div>
+					<select id="task-list" size="5" className="form-control" onChange={this.onSelectTask}>
+						{ $.map(this.props.tasks, createTaskEntry) }
+					</select>
 				</div>
+				<div className="panel-group">
+					{ this.showCurrentTask() }
+				</div>
+
+				<ImageLibrary images={this.props.images}></ImageLibrary>
+
 			</div>
 		);
 	},
@@ -33,5 +68,11 @@ var Tutorial = React.createClass({
 		var newTitle = event.target.value;
 
 		this.props.firebaseRefs.update( { title: newTitle } );
+	},
+
+	onSelectTask: function (event) {
+		var val = $(event.target).val();
+
+		this.setState({ currentTask: val });
 	}
 });
