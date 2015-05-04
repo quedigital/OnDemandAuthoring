@@ -24,7 +24,14 @@ var Task = React.createClass({
 
 		el.find(".panel-collapse").on("show.bs.collapse", $.proxy(this.onExpand));
 
+		el.on("slid.bs.carousel", this.onCarousel);
+
 		el.find(".steps-panel").sortable( { stop: $.proxy(this.onReorderSteps, this) } );
+	},
+
+	onCarousel: function () {
+		// TODO: this is a kludge to refresh the hotspot boxes (ie, triggers an update); find a better way
+		this.setState({ expanded: true });
 	},
 
 	getStepsByPriority: function () {
@@ -53,6 +60,7 @@ var Task = React.createClass({
 		var self = this;
 		var counter = 0;
 		var index = 0;
+		var index_2 = 0;
 
 		var priorities = this.getStepsByPriority();
 
@@ -61,23 +69,56 @@ var Task = React.createClass({
 
 			var step = self.props.steps[item.key];
 
-			var s = <TaskStep {...step} ref={self.onRef} index={index} number={counter} key={item.key} firebaseRefs={ self.props.firebaseRefs } firebaseKey={ newFirebaseKey } onChangeOrder={ self.onChangeOrder } />;
+			var s;
+			if (index == 0) {
+				s = (
+					<div className="item active">
+						<TaskStep {...step} ref={self.onRef} index={index} number={counter} key={item.key} firebaseRefs={ self.props.firebaseRefs } firebaseKey={ newFirebaseKey } onChangeOrder={ self.onChangeOrder } />
+					</div>
+				);
+			} else {
+				s = (
+					<div className="item">
+						<TaskStep {...step} ref={self.onRef} index={index} number={counter} key={item.key} firebaseRefs={ self.props.firebaseRefs } firebaseKey={ newFirebaseKey } onChangeOrder={ self.onChangeOrder } />
+					</div>
+				);
+			}
+
 			if (step.type === "numbered") counter++;
 			index++;
 
 			return s;
 		};
 
+		var createStepIndicators = function (item, key) {
+			if (key == 0) {
+				return <li data-target="#carousel-example-generic" data-slide-to={key} className="active"></li>
+			} else {
+				return <li data-target="#carousel-example-generic" data-slide-to={key}></li>
+			}
+		};
+
 		return (
-			<div className="task panel panel-default">
+			<div id="carousel-example-generic" className="carousel slide" data-ride="carousel" data-interval="false">
 				<div className="panel-heading" role="tab">
 					<input type="text" className="form-control input-lg" placeholder="title" value={this.props.title} onChange={ this.onChange }></input>
 				</div>
-				<div className="steps-panel" role="tabpanel">
+
+				<ol className="carousel-indicators">
+					{ $.map(priorities, createStepIndicators) }
+				</ol>
+
+				<div className="carousel-inner" role="listbox">
 					{ $.map(priorities, createStep) }
-					<div className="panel-footer">
-					</div>
 				</div>
+				<a className="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+					<span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+					<span className="sr-only">Previous</span>
+				</a>
+				<a className="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+					<span className="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					<span className="sr-only">Next</span>
+				</a>
 			</div>
 		);
 	},

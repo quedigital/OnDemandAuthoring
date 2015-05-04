@@ -124,7 +124,9 @@ var Step = React.createClass({
 		if (this.props.audio)
 			audio = <audio ref="myAudio"><source src={this.props.audio}></source></audio>;
 
-		function createMarkup (html) { return { __html: $(html).html() }; };
+		function createMarkup (html) {
+			return { __html: $(html).html() };
+		}
 
 		return (
 			<div className={classes} onClick={this.onClickStep}>

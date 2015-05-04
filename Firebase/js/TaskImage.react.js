@@ -89,7 +89,7 @@ var TaskImage = React.createClass({
 	},
 
 	sizeToFit: function () {
-		var wh = $(window).height() - 50;
+		var wh = $(window).height() * .5;//$(window).height() - 50;
 		$(".screenshot").css("max-height", wh);
 
 		// wait a frame for the image to have a size before calculating the new scale

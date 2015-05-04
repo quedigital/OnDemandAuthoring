@@ -23,7 +23,7 @@ body {
 
 .task-step {
   padding: 10px 0;
-  border-top: 5px solid black; }
+  /*border-top: 5px solid black;*/ }
   .task-step .button-row {
     margin-bottom: 10px; }
     .task-step .button-row h1 {
@@ -37,6 +37,8 @@ body {
     margin-top: 10px; }
     .task-step .button-group button + button {
       margin-left: 10px; }
+  .task-step textarea {
+    font-size: 18px; }
 
 .task-step:nth-child(even) {
   background: #d0d4dc; }
@@ -103,5 +105,27 @@ body {
   .library-image input {
     margin-top: 5px;
     width: 8em; }
+
+#carousel-example-generic .carousel-control {
+  background: none;
+  width: 40px; }
+  #carousel-example-generic .carousel-control.left {
+    left: -50px; }
+  #carousel-example-generic .carousel-control.right {
+    right: -50px; }
+  #carousel-example-generic .carousel-control .glyphicon {
+    top: 110px; }
+#carousel-example-generic .carousel-inner {
+  margin-top: 20px; }
+#carousel-example-generic .carousel-indicators {
+  top: 62px;
+  bottom: auto; }
+  #carousel-example-generic .carousel-indicators li {
+    border-color: black;
+    background-color: #bdd5ce; }
+  #carousel-example-generic .carousel-indicators .active {
+    background-color: #87e292;
+    width: 14px;
+    height: 14px; }
 
 /*# sourceMappingURL=main.css.map */

@@ -33,7 +33,7 @@ body {
 
 .task-step {
 	padding: 10px 0;
-	border-top: 5px solid black;
+	/*border-top: 5px solid black;*/
 
 	.button-row {
 		margin-bottom: 10px;
@@ -58,6 +58,10 @@ body {
 		button + button {
 			margin-left: 10px;
 		}
+	}
+
+	textarea {
+		font-size: 18px;
 	}
 }
 
@@ -144,5 +148,44 @@ body {
 	input {
 		margin-top: 5px;
 		width: 8em;
+	}
+}
+
+#carousel-example-generic {
+	.carousel-control {
+		background: none;
+		width: 40px;
+
+		&.left {
+			left: -50px;
+		}
+
+		&.right {
+			right: -50px;
+		}
+
+		.glyphicon {
+			top: 110px;
+		}
+	}
+
+	.carousel-inner {
+		margin-top: 20px;
+	}
+
+	.carousel-indicators {
+		top: 62px;
+		bottom: auto;
+
+		li {
+			border-color: black;
+			background-color: rgb(189, 213, 206);
+		}
+
+		.active {
+			background-color: rgb(135, 226, 146);
+			width: 14px;
+			height: 14px;
+		}
 	}
 }

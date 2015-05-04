@@ -1,4 +1,3 @@
-// TODO: size editor textbox to fit
 // TODO: multi-part steps?
 // TODO: intro paragraph option (doesn't go into Player) [or just make the Player smart enough to extract the first "Plain" paragraph?]
 // TODO: re-calculate .priorities after adding/removing rows
@@ -32,3 +31,4 @@
 // DONE: bold, italic, etc. in editor? [Markdown]
 // DONE: edit one task at a time
 // DONE: inline images in editor?
+// DONE: size editor textbox to fit

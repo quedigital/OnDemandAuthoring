@@ -4,6 +4,16 @@
 // image action (zoom, crop)
 
 var TaskStep = React.createClass({
+	componentDidMount: function () {
+		autosize(this.refs.myTextarea.getDOMNode());
+	},
+
+	componentDidUpdate: function () {
+		var evt = document.createEvent('Event');
+		evt.initEvent('autosize:update', true, false);
+		this.refs.myTextarea.getDOMNode().dispatchEvent(evt);
+	},
+
 	render: function () {
 		var stepNumberVisible = (this.props.type === "numbered") ? "" : "hidden";
 		var stepLabel;
@@ -117,19 +127,19 @@ var TaskStep = React.createClass({
 					<div className="col-sm-2">
 						<div className="input-group pull-left">
 							<div className="btn-group">
-								<button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">Row { this.props.index + 1 } <span className="caret"></span></button>
+								<button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">Slide { this.props.index + 1 } <span className="caret"></span></button>
 								<ul className="dropdown-menu" role="menu">
-									<li><a href="#" onClick={ this.onRowMenu } id="insert-before">Insert Row Before</a></li>
-									<li><a href="#" onClick={ this.onRowMenu } id="insert-after">Insert Row After</a></li>
+									<li><a href="#" onClick={ this.onRowMenu } id="insert-before">Insert Slide Before</a></li>
+									<li><a href="#" onClick={ this.onRowMenu } id="insert-after">Insert Slide After</a></li>
 									<li className="divider"></li>
-									<li><a href="#" onClick={ this.onRowMenu } id="remove-row">Remove Row</a></li>
+									<li><a href="#" onClick={ this.onRowMenu } id="remove-row">Remove Slide</a></li>
 								</ul>
 							</div>
 						</div>
 						{ stepLabel }
 					</div>
 					<div className="col-sm-10">
-						<div>{this.props[".priority"]}</div>
+					{/*						<div>{this.props[".priority"]}</div>*/}
 						<div className="btn-group" data-toggle="buttons">
 							<label className={ "btn btn-primary " + ((this.props.type === "numbered") ? "active" : "")} onClick={ this.onClickType } >
 								<input type="radio" name="options" id="type-numbered" checked={ this.props.type === "numbered" } onChange={ this.onChangeNothing } > Numbered</input>
@@ -153,7 +163,7 @@ var TaskStep = React.createClass({
 						</div>
 					</div>
 					<div className="col-sm-10">
-						<textarea className="form-control" id="inputStepText" placeholder="Step Text" rows="3" value={this.props.text} onChange={ this.onChangeText }>
+						<textarea ref="myTextarea" className="form-control" id="inputStepText" placeholder="Step Text" rows="1" value={this.props.text} onChange={ this.onChangeText }>
 						</textarea>
 					</div>
 				</div>
@@ -273,19 +283,20 @@ var TaskStep = React.createClass({
 		switch ($(event.target).attr("id")) {
 			case "insert-before":
 				var ref = this.props.firebaseRefs.child(this.props.firebaseKey);
-				var newRow = ref.parent().push( { text: "New row." } );
+				var newRow = ref.parent().push( { text: "New slide." } );
 				var newPriority = this.props[".priority"] - 1;
 				newRow.setPriority(newPriority);
 				break;
 			case "insert-after":
 				var ref = this.props.firebaseRefs.child(this.props.firebaseKey);
-				var newRow = ref.parent().push( { text: "New row." } );
+				var newRow = ref.parent().push( { text: "New slide." } );
 				var newPriority = this.props[".priority"] + 1;
 				newRow.setPriority(newPriority);
 				break;
 			case "remove-row":
 				var ref = this.props.firebaseRefs.child(this.props.firebaseKey);
 				ref.remove();
+				$("#carousel-example-generic").carousel('next');
 				break;
 		}
 
