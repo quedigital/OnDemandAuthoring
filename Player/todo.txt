@@ -1,5 +1,3 @@
-// TODO: don't replay audio during resize
-// TODO: still not aligning boxes correctly on resize
 // TODO: delay hint in case it's an impending double-click
 // TODO: support iPad for interaction (double-click, hover, etc)
 // TODO: support drag-and-drop, text interaction
@@ -26,3 +24,5 @@
 // DONE: don't hard-code path for loading player data
 // DONE: trigger step notifications (for the Framework highlighting)
 // DONE: convert Markdown for steps
+// DONE: don't replay audio during resize [replays from start if it hasn't finished playing yet]
+// TODONT: still not aligning boxes correctly on resize [I think this is fixed now]

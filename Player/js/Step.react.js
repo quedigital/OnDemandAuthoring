@@ -41,6 +41,7 @@ var Step = React.createClass({
 		}
 
 		this.complete = false;
+		this.audioPlayed = false;
 	},
 
 	componentWillUnmount: function () {
@@ -71,8 +72,13 @@ var Step = React.createClass({
 			if (this.props.started) {
 				this.showTextAndTarget();
 
-				this.playAudio();
+				if (!this.audioPlayed) {
+					this.playAudio();
+				}
 			}
+		} else {
+			// if we're on a different step, be sure to play the audio next time we're on this step again
+			this.audioPlayed = false;
 		}
 
 		this.complete = false;
@@ -87,6 +93,8 @@ var Step = React.createClass({
 	},
 
 	onAudioPlayed: function () {
+		this.audioPlayed = true;
+
 		if (this.props.mode == "watch") {
 			this.props.onAudioComplete(this);
 		} else {
