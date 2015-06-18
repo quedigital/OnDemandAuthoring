@@ -1,3 +1,4 @@
+// TODO: hotspots are still not sized correctly on initial load
 // TODO: delay hint in case it's an impending double-click
 // TODO: support iPad for interaction (double-click, hover, etc)
 // TODO: support drag-and-drop, text interaction

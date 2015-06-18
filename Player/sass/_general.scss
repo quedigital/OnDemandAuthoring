@@ -165,8 +165,9 @@ body {
 
 	.step-hotspot {
 		position: absolute;
-		border: 2px solid mediumblue;
+		border: 4px solid mediumblue;
 		background: rgba(55, 104, 255, 0.20);
+		box-sizing: content-box;
 	}
 }
 

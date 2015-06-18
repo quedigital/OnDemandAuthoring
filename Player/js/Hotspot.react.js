@@ -15,10 +15,10 @@ var Hotspot = React.createClass({
 
 			return (
 				<div className="step-hotspot" style={{
-					left: r[0] * this.props.scale,
-					top: r[1] * this.props.scale,
-					width: r[2] * this.props.scale,
-					height: r[3] * this.props.scale
+					left: Math.round(r[0] * this.props.scale),
+					top: Math.round(r[1] * this.props.scale),
+					width: Math.round(r[2] * this.props.scale),
+					height: Math.round(r[3] * this.props.scale)
 				}} onClick={this.onClickHotspot} onDoubleClick={this.onDoubleClickHotspot} onMouseEnter={this.onHoverHotspot}>
 				</div>
 			);

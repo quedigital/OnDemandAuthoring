@@ -112,8 +112,9 @@ body {
     width: 100%; }
   .step-holder .step-hotspot {
     position: absolute;
-    border: 2px solid mediumblue;
-    background: rgba(55, 104, 255, 0.2); }
+    border: 4px solid mediumblue;
+    background: rgba(55, 104, 255, 0.2);
+    box-sizing: content-box; }
 
 .inviso {
   visibility: hidden; }

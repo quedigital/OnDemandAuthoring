@@ -9,10 +9,13 @@ var PlayerApp = React.createClass({
 		var mode = $.urlParam("mode");
 		if (mode == undefined) mode = "try";
 
+		var started = $.urlParam("started");
+		if (started == undefined) started = false;
+
 		return {
 			title: null,
 			mode: mode,
-			started: false
+			started: started
 		};
 	},
 

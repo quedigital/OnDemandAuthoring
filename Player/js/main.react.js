@@ -11,7 +11,7 @@ $.urlParam = function(name){
 createjs.CSSPlugin.install();
 
 var path = $.urlParam("datafile");
-var datafile = decodeURI(path)
+var datafile = decodeURI(path);
 
 // add image CSS
 var path = datafile.substr(0, datafile.indexOf("/"));
