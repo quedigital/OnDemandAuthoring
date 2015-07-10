@@ -28,3 +28,4 @@
 // DONE: convert Markdown for steps
 // DONE: don't replay audio during resize [replays from start if it hasn't finished playing yet]
 // TODONT: still not aligning boxes correctly on resize [I think this is fixed now]
+// DONE: renamed Player to player
