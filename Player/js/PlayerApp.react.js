@@ -20,7 +20,11 @@ var PlayerApp = React.createClass({
 	},
 
 	componentDidMount: function () {
-		var path = "../../Prototype1.5/" + this.props.source;
+		var path;
+		if (window.location.hostname == "localhost")
+			path = "../../Prototype1.5/" + this.props.source;
+		else
+			path = "../" + this.props.source;
 
 		var json = $.getJSON(path, this.gotData);
 
