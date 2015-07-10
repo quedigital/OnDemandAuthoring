@@ -12,7 +12,16 @@ var Step = React.createClass({
 	findImageScale: function() {
 		var img = this.refs.myImage.getDOMNode();
 
-		var scale = img.height / img.naturalHeight;
+		var scale;
+
+		var aspect = img.naturalWidth / img.naturalHeight;
+		if (aspect < 1.333) {
+			$(img).addClass("wide");
+			scale = $(img).width() / img.naturalWidth;
+		} else {
+			$(img).addClass("tall");
+			scale = $(img).height() / img.naturalHeight;
+		}
 
 		// Only report changed size to avoid infinite recursion
 		if (img.height && this.state.scale !== scale) {
@@ -21,6 +30,8 @@ var Step = React.createClass({
 	},
 
 	componentDidMount: function () {
+		$(document).keydown(this.onKeyDown);
+
 		if (this.refs.myAudio) {
 			var audio = this.refs.myAudio.getDOMNode();
 			audio.addEventListener("ended", this.onAudioPlayed);
@@ -49,6 +60,8 @@ var Step = React.createClass({
 			var audio = this.refs.myAudio.getDOMNode();
 			audio.removeEventListener("ended", this.onAudioPlayed);
 		}
+
+		$(document).off("keydown", this.onKeyDown);
 	},
 
 	componentWillUpdate: function () {
@@ -100,6 +113,19 @@ var Step = React.createClass({
 		} else {
 			if (!this.props.rect)
 				this.props.onAudioComplete(this);
+		}
+	},
+
+	onKeyDown: function (event) {
+		if (this.props.mode == "try" && this.props.current) {
+			if (this.props.trigger == "enter" && !this.complete) {
+				if (event.keyCode == 13) {
+					this.props.onStepComplete(this, true);
+					event.stopImmediatePropagation();
+				} else {
+					this.showHint();
+				}
+			}
 		}
 	},
 
@@ -162,6 +188,11 @@ var Step = React.createClass({
 				this.showHint();
 			}
 		}
+	},
+
+	onKeyPress: function (event) {
+		console.log("key");
+		console.log(event);
 	},
 
 	positionText: function () {

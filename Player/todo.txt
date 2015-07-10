@@ -1,4 +1,3 @@
-// TODO: size to fit available area
 // TODO: hotspots are still not sized correctly on initial load
 // TODO: delay hint in case it's an impending double-click
 // TODO: support iPad for interaction (double-click, hover, etc)
@@ -29,3 +28,4 @@
 // DONE: don't replay audio during resize [replays from start if it hasn't finished playing yet]
 // TODONT: still not aligning boxes correctly on resize [I think this is fixed now]
 // DONE: renamed Player to player
+// DONE: size to fit available area (even for non-4x3 background images)

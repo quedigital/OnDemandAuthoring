@@ -160,7 +160,14 @@ body {
 
 	.step-image {
 		position: absolute;
-		width: 100%;
+
+		&.tall {
+			width: 100%;
+		}
+
+		&.wide {
+			height: 100%;
+		}
 	}
 
 	.step-hotspot {

@@ -82,12 +82,14 @@ var Task = React.createClass({
 				</div>
 				{controls}
 				<Mousetrail hidden={hide} ref="myMouse"></Mousetrail>
-				<button className="btn btn-primary" onClick={this.onClickPrevStep}>Prev</button>
-				<button className="btn btn-success" onClick={this.onClickNextStep}>Next</button>
 				{repeat_button}
 				<audio ref="myClickSound"><source src="sounds/mouseclick.mp3"></source></audio>
 			</div>
 		);
+
+		// debug buttons:
+		//				<button className="btn btn-primary" onClick={this.onClickPrevStep}>Prev</button>
+		//      		<button className="btn btn-success" onClick={this.onClickNextStep}>Next</button>
 	},
 
 	onClickTask: function () {

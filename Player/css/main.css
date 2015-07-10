@@ -108,8 +108,11 @@ body {
       background: linear-gradient(to top, #a23f48 0%, #d31f41 80%, #c6081d 90%, #eea196 100%);
       transition: background-color .5s ease-in-out; }
   .step-holder .step-image {
-    position: absolute;
-    width: 100%; }
+    position: absolute; }
+    .step-holder .step-image.tall {
+      width: 100%; }
+    .step-holder .step-image.wide {
+      height: 100%; }
   .step-holder .step-hotspot {
     position: absolute;
     border: 4px solid mediumblue;
