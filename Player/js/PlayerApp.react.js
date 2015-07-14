@@ -11,6 +11,7 @@ var PlayerApp = React.createClass({
 
 		var started = $.urlParam("started");
 		if (started == undefined) started = false;
+		else started = started == "true";
 
 		return {
 			title: null,
@@ -78,6 +79,7 @@ var PlayerApp = React.createClass({
 				onComplete={this.onTaskComplete}
 				onCurrent={this.onCurrentStep}
 				onTogglePause={this.onTogglePause}
+				onStart={this.start}
 				started={this.state.started}></Task>;
 		} else {
 			return <p>Loading</p>;
@@ -97,9 +99,11 @@ var PlayerApp = React.createClass({
 	},
 
 	onCurrentStep: function (step_key) {
-		var params = { key: step_key };
+		if (this.state.started) {
+			var params = {key: step_key};
 
-		this.trigger("CPAPI_SLIDEENTER", params);
+			this.trigger("CPAPI_SLIDEENTER", params);
+		}
 	},
 
 	onTogglePause: function () {

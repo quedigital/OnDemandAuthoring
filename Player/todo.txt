@@ -29,3 +29,9 @@
 // TODONT: still not aligning boxes correctly on resize [I think this is fixed now]
 // DONE: renamed Player to player
 // DONE: size to fit available area (even for non-4x3 background images)
+// DONE: enter for watch it
+// DONE: show an ENTER key animation
+// DONE: only send current step when "started"
+// DONE: start cursor over at center of screen
+// DONE: BUG: when repeating task, last arrow is not in the right place
+// DONE: hold image on last step when done

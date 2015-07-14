@@ -118,6 +118,8 @@ body {
     border: 4px solid mediumblue;
     background: rgba(55, 104, 255, 0.2);
     box-sizing: content-box; }
+  .step-holder .step.current:not(.started) .step-hotspot {
+    display: none; }
 
 .inviso {
   visibility: hidden; }
@@ -125,7 +127,13 @@ body {
 #watch-button, #try-button {
   float: right; }
 
-#repeat-button {
+#overlay-button {
   position: absolute; }
+
+#enter-key {
+  position: absolute;
+  display: none;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%; }
 
 /*# sourceMappingURL=main.css.map */

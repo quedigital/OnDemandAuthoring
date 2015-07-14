@@ -19,7 +19,8 @@ var Task = React.createClass({
 	},
 
 	createStep: function (item, index) {
-		var current = (index == this.state.currentStep) && (!this.state.finished);
+//		var current = (index == this.state.currentStep) && (!this.state.finished);
+		var current = (index == this.state.currentStep);
 
 		return <Step {...item} myKey={index} ref={this.onRef} current={current} key={index} onAudioComplete={this.onAudioComplete} onStepComplete={this.onStepComplete} onCurrent={this.onCurrentStep} mode={this.props.mode} lastMouse={this.lastMouse} started={this.props.started} finished={this.state.finished}></Step>
 	},
@@ -68,10 +69,14 @@ var Task = React.createClass({
 
 		var hide = this.state.finished;
 
-		var repeat_button;
+		var overlay_button;
 		if (this.state.finished) {
-			repeat_button = (
-				<button id="repeat-button" className="btn" onClick={this.onClickRepeat}><i className="fa fa-3x fa-repeat"></i></button>
+			overlay_button = (
+				<button id="overlay-button" className="btn" onClick={this.onClickRepeat}><i className="fa fa-3x fa-repeat"></i></button>
+			)
+		} else if (!this.props.started) {
+			overlay_button = (
+				<button id="overlay-button" className="btn" onClick={this.onClickPlay}><i className="fa fa-3x fa-play"></i></button>
 			)
 		}
 
@@ -82,7 +87,8 @@ var Task = React.createClass({
 				</div>
 				{controls}
 				<Mousetrail hidden={hide} ref="myMouse"></Mousetrail>
-				{repeat_button}
+				{overlay_button}
+				<img id="enter-key" src="images/enter-key.png"/>
 				<audio ref="myClickSound"><source src="sounds/mouseclick.mp3"></source></audio>
 			</div>
 		);
@@ -99,10 +105,21 @@ var Task = React.createClass({
 	},
 
 	onClickRepeat: function () {
+		var el = $(this.getDOMNode()).find(".step-holder");
+
+		this.lastMouse = { x: el.width() * .5, y: el.height() * .5 };
+		var myMouse = this.refs.myMouse;
+		var cursor = $(myMouse.getDOMNode());
+		cursor.css({ left: this.lastMouse.x, top: this.lastMouse.y });
+
 		var step = this.getStepByIndex(0);
 		if (step) {
 			this.setState({ finished: false, currentStep: step });
 		}
+	},
+
+	onClickPlay: function () {
+		this.props.onStart();
 	},
 
 	pause: function () {
@@ -211,7 +228,7 @@ var Task = React.createClass({
 	},
 
 	setupForStep: function () {
-		if (this.props.mode == "watch") {
+		if (this.props.mode == "watch" && this.props.started) {
 			var step = this.getCurrentStep();
 
 			if (step && step.props.rect) {
@@ -266,7 +283,7 @@ var Task = React.createClass({
 			btn.hide(0).position({ my: "center top+20", at: "center bottom", of: text, collision: "none" }).addClass("animated fadeIn").animate( { _justDelay: 0 }, 1000, function () { btn.show(0); } );
 		}
 
-		btn = el.find("#repeat-button");
+		btn = el.find("#overlay-button");
 		if (btn.length) {
 			btn.position({ my: "center top", at: "center center+50", of: el, collision: "none" });
 		}
@@ -293,6 +310,9 @@ var Task = React.createClass({
 					break;
 				case "hover":
 					this.hoverMouseCursor();
+					break;
+				case "enter":
+					this.pressEnter();
 					break;
 			}
 		}
@@ -335,5 +355,45 @@ var Task = React.createClass({
 		createjs.Tween.get(cursor[0])
 			.wait(300)
 			.call(this.onCursorComplete, null, this);
+	},
+
+	pressEnter: function () {
+		this.showCursor(false);
+
+		var enter = $("#enter-key");
+
+		createjs.Tween.get(enter[0])
+			.wait(750)
+			.call(this.showEnterKey, [true])
+			.wait(750)
+			.set( { transform: "translate(-50%, -50%) scale(.8)"}, enter[0].style )
+			.call(this.playClickSound, null, this)
+			.wait(100)
+			.set( { transform: "translate(-50%, -50%) scale(1)"}, enter[0].style )
+			.wait(500)
+			.call(this.onCursorComplete, null, this)
+			.call(this.showEnterKey, [false]);
+	},
+
+	showEnterKey: function (visible) {
+		if (visible) {
+			var step = this.getCurrentStep();
+
+			if (step && step.props.rect) {
+				var center = Hotspot.getCenterOfRect(step.props.rect, step.state.scale);
+				$("#enter-key").css({left: center.x, top: center.y}).show(0);
+			}
+		} else {
+			$("#enter-key").hide(0);
+		}
+	},
+
+	showCursor: function (visible) {
+		var cursor = this.refs.myMouse;
+		if (visible) {
+			cursor.show();
+		} else {
+			cursor.hide();
+		}
 	}
 });

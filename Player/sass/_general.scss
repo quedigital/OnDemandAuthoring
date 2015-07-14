@@ -176,6 +176,10 @@ body {
 		background: rgba(55, 104, 255, 0.20);
 		box-sizing: content-box;
 	}
+
+	.step.current:not(.started) .step-hotspot {
+		display: none;
+	}
 }
 
 .inviso {
@@ -186,6 +190,13 @@ body {
 	float: right;
 }
 
-#repeat-button {
+#overlay-button {
 	position: absolute;
+}
+
+#enter-key {
+	position: absolute;
+	display: none;
+	transform: translate(-50%, -50%);
+	transform-origin: 50% 50%;
 }

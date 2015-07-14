@@ -117,6 +117,8 @@ var Step = React.createClass({
 	},
 
 	onKeyDown: function (event) {
+		if (this.props.finished) return;
+
 		if (this.props.mode == "try" && this.props.current) {
 			if (this.props.trigger == "enter" && !this.complete) {
 				if (event.keyCode == 13) {
@@ -133,13 +135,19 @@ var Step = React.createClass({
 		if (this.refs.myText) {
 			var txt = this.refs.myText.getDOMNode();
 			// NOTE: React was leaving some old classes around
-			$(txt).hide(0).removeClass("inviso animated hinted fadeInLeft fadeInRight fadeInDown fadeInUp").addClass("animated fadeIn").show(0);
+			$(txt).hide(0).removeClass("inviso animated hinted fadeInLeft fadeInRight fadeInDown fadeInUp");
+
+			if (!this.props.finished)
+				$(txt).addClass("animated fadeIn").show(0);
 		}
 
 		if (this.refs.myHotspot) {
 			var hotspot = this.refs.myHotspot.getDOMNode();
 			if (this.props.mode == "watch") {
-				$(hotspot).css({opacity: 1}).hide(0).removeClass("animated").delay(1500).addClass("animated tada").show(0);
+				$(hotspot).css({opacity: 1}).hide(0).removeClass("animated");
+
+				if (!this.props.finished)
+					$(hotspot).delay(1500).addClass("animated tada").show(0);
 			} else {
 				$(hotspot).css({opacity: 0});
 			}
@@ -149,10 +157,13 @@ var Step = React.createClass({
 	render: function () {
 		var classes = "step";
 
-		if (!this.props.current || this.props.finished)
+		if (!this.props.current)// || this.props.finished)
 			classes += " inviso";
 		else
 			classes += " current";
+
+		if (this.props.started)
+			classes += " started";
 
 		var audio;
 		if (this.props.audio)
@@ -180,6 +191,8 @@ var Step = React.createClass({
 	},
 
 	onClickStep: function (event) {
+		if (this.props.finished) return;
+
 		if (this.props.mode == "try") {
 			// if there is no Hotspot, a click anywhere will advance us
 			if (!this.props.rect) {
@@ -242,7 +255,7 @@ var Step = React.createClass({
 					my = "center top+20"; at = "center bottom"; arrows = "arrow arrow-top"; break;
 			}
 
-			$(txt).removeClass("arrow-right arrow-bottom arrow-left arrow-top").position({my: my, at: at, of: hotspot, collision: "fit"}).addClass(arrows);
+			$(txt).removeClass("arrow-right arrow-bottom arrow-left arrow-top").show(0).position({my: my, at: at, of: hotspot, collision: "fit"}).hide(0).addClass(arrows);
 
 			this.textDirection = largest;
 		} else {
