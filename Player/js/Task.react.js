@@ -70,13 +70,15 @@ var Task = React.createClass({
 		var hide = this.state.finished;
 
 		var overlay_button;
+		var classes = "btn " + this.props.mode;
+
 		if (this.state.finished) {
 			overlay_button = (
-				<button id="overlay-button" className="btn" onClick={this.onClickRepeat}><i className="fa fa-3x fa-repeat"></i></button>
+				<button id="overlay-button" className={classes} onClick={this.onClickRepeat}><i className="fa fa-3x fa-repeat"></i></button>
 			)
 		} else if (!this.props.started) {
 			overlay_button = (
-				<button id="overlay-button" className="btn" onClick={this.onClickPlay}><i className="fa fa-3x fa-play"></i></button>
+				<button id="overlay-button" className={classes} onClick={this.onClickPlay}><i className="fa fa-3x fa-play"></i></button>
 			)
 		}
 
@@ -173,6 +175,15 @@ var Task = React.createClass({
 
 	getCurrentStepIndex: function () {
 		return this.getIndexOfStep(this.state.currentStep);
+	},
+
+	gotoStep: function (key) {
+		console.log("I'm trying to go to " + key);
+
+		var step = this.props.steps[key];
+		if (step) {
+			this.setState({ finished: false, currentStep: key });
+		}
 	},
 
 	doRewind: function () {

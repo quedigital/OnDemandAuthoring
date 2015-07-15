@@ -129,6 +129,14 @@ body {
 
 #overlay-button {
   position: absolute; }
+  #overlay-button:before {
+    display: block;
+    color: #352c86;
+    font-weight: bold; }
+  #overlay-button.watch:before {
+    content: "Watch It"; }
+  #overlay-button.try:before {
+    content: "Try It"; }
 
 #enter-key {
   position: absolute;

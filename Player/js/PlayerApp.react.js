@@ -163,5 +163,12 @@ var PlayerApp = React.createClass({
 		}
 
 		return undefined;
+	},
+
+	gotoSlide: function (key) {
+		if (this.refs.myTask) {
+			this.start();
+			this.refs.myTask.gotoStep(key);
+		}
 	}
 });

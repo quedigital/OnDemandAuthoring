@@ -192,6 +192,20 @@ body {
 
 #overlay-button {
 	position: absolute;
+
+	&:before {
+		display: block;
+		color: rgb(53, 44, 134);
+		font-weight: bold;
+	}
+
+	&.watch:before {
+		content: "Watch It";
+	}
+
+	&.try:before {
+		content: "Try It";
+	}
 }
 
 #enter-key {

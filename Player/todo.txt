@@ -35,3 +35,4 @@
 // DONE: start cursor over at center of screen
 // DONE: BUG: when repeating task, last arrow is not in the right place
 // DONE: hold image on last step when done
+// DONE: show "Watch It" or "Try It" on the play screen
