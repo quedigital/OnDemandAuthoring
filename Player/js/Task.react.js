@@ -296,7 +296,7 @@ var Task = React.createClass({
 
 		btn = el.find("#overlay-button");
 		if (btn.length) {
-			btn.position({ my: "center top", at: "center center+50", of: el, collision: "none" });
+			btn.position({ my: "center center", at: "center center", of: el, collision: "none" });
 		}
 	},
 

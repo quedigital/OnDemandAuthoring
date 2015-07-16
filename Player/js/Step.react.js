@@ -5,10 +5,6 @@ var Step = React.createClass({
 		};
 	},
 
-	onImageLoaded: function () {
-		//this.findImageScale();
-	},
-
 	findImageScale: function() {
 		var img = this.refs.myImage.getDOMNode();
 
@@ -173,14 +169,22 @@ var Step = React.createClass({
 			return { __html: $(html).html() };
 		}
 
-		return (
-			<div className={classes} onClick={this.onClickStep}>
+		if (!this.props.started) {
+			return (
+				<div className={classes} onClick={this.onClickStep}>
+					<img ref="myImage" className="step-image" src={this.props.image}/>
+				</div>
+			);
+		} else {
+			return (
+				<div className={classes} onClick={this.onClickStep}>
 				{audio}
-				<img ref="myImage" className="step-image" src={this.props.image} onLoad={this.onImageLoaded}/>
-				<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} mode={this.props.mode} onStepComplete={this.onStepComplete} onStepHint={this.showHint}/>
-				<p ref="myText" className="step-text inviso" dangerouslySetInnerHTML={createMarkup(this.props.text)}></p>
-			</div>
-		);
+					<img ref="myImage" className="step-image" src={this.props.image}/>
+					<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} mode={this.props.mode} onStepComplete={this.onStepComplete} onStepHint={this.showHint}/>
+					<p ref="myText" className="step-text inviso" dangerouslySetInnerHTML={createMarkup(this.props.text)}></p>
+				</div>
+			);
+		}
 	},
 
 	onStepComplete: function (step, advance) {

@@ -128,7 +128,16 @@ body {
   float: right; }
 
 #overlay-button {
-  position: absolute; }
+  position: absolute;
+  padding: 30px 60px;
+  font-size: 32px;
+  outline: none;
+  box-shadow: -20px 20px 50px black; }
+  #overlay-button:hover {
+    background-color: #888;
+    color: black; }
+    #overlay-button:hover:before {
+      color: white; }
   #overlay-button:before {
     display: block;
     color: #352c86;
