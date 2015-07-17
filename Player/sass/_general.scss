@@ -177,6 +177,11 @@ body {
 		box-sizing: content-box;
 	}
 
+	.step.text-input .step-hotspot {
+		border: none;
+		background: none;
+	}
+
 	.step.current:not(.started) .step-hotspot {
 		display: none;
 	}
@@ -230,4 +235,14 @@ body {
 	display: none;
 	transform: translate(-50%, -50%);
 	transform-origin: 50% 50%;
+}
+
+.input-box {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border: none;
+	background: none;
 }

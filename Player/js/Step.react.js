@@ -145,7 +145,12 @@ var Step = React.createClass({
 				if (!this.props.finished)
 					$(hotspot).delay(1500).addClass("animated tada").show(0);
 			} else {
-				$(hotspot).css({opacity: 0});
+				if (this.props.trigger != "text")
+					$(hotspot).css({opacity: 0});
+				else {
+					$(hotspot).css({opacity: 1});
+					$(hotspot).find("input").focus();
+				}
 			}
 		}
 	},
@@ -160,6 +165,10 @@ var Step = React.createClass({
 
 		if (this.props.started)
 			classes += " started";
+
+		if (this.props.trigger == "text") {
+			classes += " text-input";
+		}
 
 		var audio;
 		if (this.props.audio)
@@ -180,7 +189,8 @@ var Step = React.createClass({
 				<div className={classes} onClick={this.onClickStep}>
 				{audio}
 					<img ref="myImage" className="step-image" src={this.props.image}/>
-					<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} mode={this.props.mode} onStepComplete={this.onStepComplete} onStepHint={this.showHint}/>
+					<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} mode={this.props.mode} onStepComplete={this.onStepComplete} onStepHint={this.showHint}
+						input={this.props.input} />
 					<p ref="myText" className="step-text inviso" dangerouslySetInnerHTML={createMarkup(this.props.text)}></p>
 				</div>
 			);
@@ -201,15 +211,10 @@ var Step = React.createClass({
 			// if there is no Hotspot, a click anywhere will advance us
 			if (!this.props.rect) {
 				this.props.onStepComplete(this, true);
-			} else if (!this.complete) {
+			} else if (!this.complete && this.props.trigger != "text") {
 				this.showHint();
 			}
 		}
-	},
-
-	onKeyPress: function (event) {
-		console.log("key");
-		console.log(event);
 	},
 
 	positionText: function () {

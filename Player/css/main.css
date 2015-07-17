@@ -118,6 +118,9 @@ body {
     border: 4px solid mediumblue;
     background: rgba(55, 104, 255, 0.2);
     box-sizing: content-box; }
+  .step-holder .step.text-input .step-hotspot {
+    border: none;
+    background: none; }
   .step-holder .step.current:not(.started) .step-hotspot {
     display: none; }
 
@@ -152,5 +155,14 @@ body {
   display: none;
   transform: translate(-50%, -50%);
   transform-origin: 50% 50%; }
+
+.input-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: none;
+  background: none; }
 
 /*# sourceMappingURL=main.css.map */

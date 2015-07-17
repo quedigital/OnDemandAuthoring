@@ -13,6 +13,11 @@ var Hotspot = React.createClass({
 		if (this.props.rect) {
 			r = this.props.rect.split(",");
 
+			var inputBox;
+			if (this.props.trigger == "text") {
+				inputBox = <input ref="myInput" className="input-box" onChange={this.onChangeText}/>;
+			}
+
 			return (
 				<div className="step-hotspot" style={{
 					left: Math.round(r[0] * this.props.scale),
@@ -20,6 +25,7 @@ var Hotspot = React.createClass({
 					width: Math.round(r[2] * this.props.scale),
 					height: Math.round(r[3] * this.props.scale)
 				}} onClick={this.onClickHotspot} onDoubleClick={this.onDoubleClickHotspot} onMouseEnter={this.onHoverHotspot}>
+					{inputBox}
 				</div>
 			);
 		} else {
@@ -32,7 +38,7 @@ var Hotspot = React.createClass({
 
 		if (this.props.trigger == "click") {
 			this.props.onStepComplete(this, true);
-		} else {
+		} else if (this.props.trigger != "text") {
 			this.props.onStepHint(this);
 		}
 	},
@@ -52,6 +58,16 @@ var Hotspot = React.createClass({
 
 		if (this.props.trigger == "hover") {
 			this.props.onStepComplete(this, true);
+		}
+	},
+
+	onChangeText: function (event) {
+		if (this.props.mode == "try" && this.props.trigger == "text") {
+			var targetText = this.props.input.toUpperCase();
+			var curText = $(this.refs.myInput.getDOMNode()).val().toUpperCase();
+			if (targetText == curText) {
+				this.props.onStepComplete(this, true);
+			}
 		}
 	}
 });
