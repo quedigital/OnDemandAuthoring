@@ -69,5 +69,17 @@ var Hotspot = React.createClass({
 				this.props.onStepComplete(this, true);
 			}
 		}
+	},
+
+	typeText: function () {
+		var dom = $(this.refs.myInput.getDOMNode());
+
+		var me = this;
+
+		createjs.Tween.get(dom)
+			.wait(750)
+			.call(function () { dom.val(me.props.input); })
+			.wait(750)
+			.call(function () { me.props.onStepComplete(this, true); });
 	}
 });

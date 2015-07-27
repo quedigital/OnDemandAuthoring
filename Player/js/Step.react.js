@@ -142,8 +142,13 @@ var Step = React.createClass({
 			if (this.props.mode == "watch") {
 				$(hotspot).css({opacity: 1}).hide(0).removeClass("animated");
 
-				if (!this.props.finished)
-					$(hotspot).delay(1500).addClass("animated tada").show(0);
+				if (!this.props.finished) {
+					if (this.props.trigger == "text") {
+						$(hotspot).delay(1500).show(0);
+					} else {
+						$(hotspot).delay(1500).addClass("animated tada").show(0);
+					}
+				}
 			} else {
 				if (this.props.trigger != "text")
 					$(hotspot).css({opacity: 0});
@@ -312,5 +317,13 @@ var Step = React.createClass({
 			return audio.duration * 1000;
 		} else
 			return 0;
+	},
+
+	typeText: function () {
+		var hotspot = this.refs.myHotspot;
+
+		if (hotspot) {
+			hotspot.typeText();
+		}
 	}
 });

@@ -178,8 +178,6 @@ var Task = React.createClass({
 	},
 
 	gotoStep: function (key) {
-		console.log("I'm trying to go to " + key);
-
 		var step = this.props.steps[key];
 		if (step) {
 			this.setState({ finished: false, currentStep: key });
@@ -325,6 +323,9 @@ var Task = React.createClass({
 				case "enter":
 					this.pressEnter();
 					break;
+				case "text":
+					this.typeText();
+					break;
 			}
 		}
 	},
@@ -405,6 +406,13 @@ var Task = React.createClass({
 			cursor.show();
 		} else {
 			cursor.hide();
+		}
+	},
+
+	typeText: function () {
+		var step = this.getCurrentStep();
+		if (step) {
+			step.typeText();
 		}
 	}
 });

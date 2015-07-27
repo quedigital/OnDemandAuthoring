@@ -37,3 +37,4 @@
 // DONE: hold image on last step when done
 // DONE: show "Watch It" or "Try It" on the play screen
 // DONE: text input
+// DONE: text input for Watch
