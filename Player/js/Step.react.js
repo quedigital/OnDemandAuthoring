@@ -31,6 +31,7 @@ var Step = React.createClass({
 		if (this.refs.myAudio) {
 			var audio = this.refs.myAudio.getDOMNode();
 			audio.addEventListener("ended", this.onAudioPlayed);
+			audio.addEventListener("loadedmetadata", this.onAudioLoaded);
 		}
 
 		this.findImageScale();
@@ -55,6 +56,7 @@ var Step = React.createClass({
 		if (this.refs.myAudio) {
 			var audio = this.refs.myAudio.getDOMNode();
 			audio.removeEventListener("ended", this.onAudioPlayed);
+			audio.removeEventListener("loadedmetadata", this.onAudioLoaded);
 		}
 
 		$(document).off("keydown", this.onKeyDown);
@@ -73,9 +75,9 @@ var Step = React.createClass({
 	componentDidUpdate: function () {
 		this.findImageScale();
 
-		this.positionText();
-
 		if (this.props.current) {
+			this.positionText();
+
 			this.props.onCurrent(this);
 
 			if (this.props.started) {
@@ -109,6 +111,13 @@ var Step = React.createClass({
 		} else {
 			if (!this.props.rect)
 				this.props.onAudioComplete(this);
+		}
+	},
+
+	onAudioLoaded: function (event) {
+		if (this.props.current) {
+			// refresh when audio is loaded
+			this.props.onCurrent(this);
 		}
 	},
 
@@ -269,7 +278,12 @@ var Step = React.createClass({
 					my = "center top+20"; at = "center bottom"; arrows = "arrow arrow-top"; break;
 			}
 
+			// make the hotspot visible so it can be positioned around
+			$(hotspot).css("display", "block");
+
 			$(txt).removeClass("arrow-right arrow-bottom arrow-left arrow-top").show(0).position({my: my, at: at, of: hotspot, collision: "fit"}).hide(0).addClass(arrows);
+
+			$(hotspot).css("display", "none");
 
 			this.textDirection = largest;
 		} else {

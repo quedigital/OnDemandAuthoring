@@ -1,4 +1,3 @@
-// TODO: hotspots are still not sized correctly on initial load
 // TODO: delay hint in case it's an impending double-click
 // TODO: support iPad for interaction (double-click, hover, etc)
 // TODO: support drag-and-drop, text interaction
@@ -38,3 +37,5 @@
 // DONE: show "Watch It" or "Try It" on the play screen
 // DONE: text input
 // DONE: text input for Watch
+// DONE: hotspots are still not sized correctly on initial load [visibility]
+// DONE: delay mouse based on audio (may have to wait for audio to load to determine duration)

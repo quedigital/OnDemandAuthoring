@@ -32,7 +32,8 @@ var Task = React.createClass({
 	componentDidUpdate: function () {
 		this.positionButton();
 
-		this.setupForStep();
+		// don't setup now; setup when we're "current"
+		//this.setupForStep();
 	},
 
 	componentWillMount: function () {
@@ -53,7 +54,7 @@ var Task = React.createClass({
 
 		this.positionButton();
 
-		this.setupForStep();
+		//this.setupForStep();
 	},
 
 	render: function () {
@@ -234,6 +235,8 @@ var Task = React.createClass({
 		if (this.props.onCurrent) {
 			this.props.onCurrent(step.props.myKey);
 		}
+
+		this.setupForStep();
 	},
 
 	setupForStep: function () {
@@ -251,7 +254,8 @@ var Task = React.createClass({
 
 				var delay = Math.max(step.getAudioDuration() - 250, 0);
 
-				if (center.x != this.lastMouse.x || center.y != this.lastMouse.y) {
+				// NOTE: don't set up the cursor animation until we have an audio duration
+				if (!isNaN(delay) && (center.x != this.lastMouse.x || center.y != this.lastMouse.y) ) {
 					createjs.Tween.get(cursor[0])
 						.set({display: "none"}, cursor[0].style)
 						.wait(delay)
@@ -264,7 +268,8 @@ var Task = React.createClass({
 				}
 			} else {
 				var cursor = this.refs.myMouse;
-				cursor.hide();
+				if (cursor)
+					cursor.hide();
 			}
 
 			if (step) {
