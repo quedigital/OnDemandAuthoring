@@ -1,3 +1,5 @@
+// TODO: entering formula lesson, try it restarts watch it [narrower window problem, translation/position issue]
+// TODO: last step audio is playing twice (if you click before the audio is done) [fixed?]
 // TODO: delay hint in case it's an impending double-click
 // TODO: support iPad for interaction (double-click, hover, etc)
 // TODO: support drag-and-drop, text interaction
@@ -39,3 +41,5 @@
 // DONE: text input for Watch
 // DONE: hotspots are still not sized correctly on initial load [visibility]
 // DONE: delay mouse based on audio (may have to wait for audio to load to determine duration)
+// DONE: separate callout text for interactive side [shortText; entered as text, html would require more work]
+// DONE: are the arrows supposed to be offset to point to the exact spot?

@@ -137,6 +137,10 @@ var PlayerApp = React.createClass({
 		this.setState( { started: true } );
 	},
 
+	startOver: function () {
+		this.setState( { started: false } );
+	},
+
 	play: function () {
 		if (this.refs.myTask) {
 			this.refs.myTask.resume();

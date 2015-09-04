@@ -50,63 +50,151 @@ body {
     box-shadow: 0px 0px 8px #909090;
     max-width: 300px;
     text-align: center;
-    z-index: 3; }
-    .step-holder .step-text.arrow:after, .step-holder .step-text.arrow:before {
-      border: solid transparent;
-      content: " ";
-      height: 0;
-      width: 0;
-      position: absolute;
-      pointer-events: none; }
-    .step-holder .step-text.arrow-top:after, .step-holder .step-text.arrow-top:before {
-      bottom: 100%;
-      left: 50%; }
-    .step-holder .step-text.arrow-bottom:after, .step-holder .step-text.arrow-bottom:before {
-      top: 100%;
-      left: 50%; }
-    .step-holder .step-text.arrow-left:after, .step-holder .step-text.arrow-left:before {
-      right: 100%;
-      top: 50%; }
-    .step-holder .step-text.arrow-right:after, .step-holder .step-text.arrow-right:before {
-      left: 100%;
-      top: 50%; }
-    .step-holder .step-text.arrow:after {
-      border-color: rgba(255, 255, 255, 0);
-      border-width: 25px; }
-    .step-holder .step-text.arrow:before {
-      border-color: rgba(255, 255, 255, 0);
-      border-width: 26px; }
-    .step-holder .step-text.arrow-top:after {
-      border-bottom-color: white;
-      margin-left: -25px;
-      -webkit-filter: drop-shadow(0px -2px 2px rgba(0, 0, 0, 0.5)); }
-    .step-holder .step-text.arrow-top:before {
-      border-bottom-color: white;
-      margin-left: -26px; }
-    .step-holder .step-text.arrow-bottom:after {
-      border-top-color: white;
-      margin-left: -25px;
-      -webkit-filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5)); }
-    .step-holder .step-text.arrow-bottom:before {
-      border-top-color: white;
-      margin-left: -26px; }
-    .step-holder .step-text.arrow-left:after {
-      border-right-color: white;
-      margin-top: -25px;
-      -webkit-filter: drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.5)); }
-    .step-holder .step-text.arrow-left:before {
-      border-right-color: white;
-      margin-top: -26px; }
-    .step-holder .step-text.arrow-right:after {
-      border-left-color: white;
-      margin-top: -25px;
-      -webkit-filter: drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.5)); }
-    .step-holder .step-text.arrow-right:before {
-      border-left-color: white;
-      margin-top: -26px; }
+    z-index: 3;
+    		/*
+    		&.arrow:after, &.arrow:before {
+    			border: solid transparent;
+    			content: " ";
+    			height: 0;
+    			width: 0;
+    			position: absolute;
+    			pointer-events: none;
+    		}
+    
+    		&.arrow-top:after, &.arrow-top:before {
+    			bottom: 100%;
+    			left: 50%;
+    		}
+    
+    		&.arrow-bottom:after, &.arrow-bottom:before {
+    			top: 100%;
+    			left: 50%;
+    		}
+    
+    		&.arrow-left:after, &.arrow-left:before {
+    			right: 100%;
+    			top: 50%;
+    		}
+    
+    		&.arrow-right:after, &.arrow-right:before {
+    			left: 100%;
+    			top: 50%;
+    		}
+    
+    		&.arrow:after {
+    			border-color: rgba(255, 255, 255, 0);
+    			border-width: 25px;
+    		}
+    
+    		&.arrow:before {
+    			border-color: rgba(255, 255, 255, 0);
+    			border-width: 26px;
+    		}
+    
+    		&.arrow-top:after {
+    			border-bottom-color: white;
+    			margin-left: -25px;
+    			-webkit-filter: drop-shadow(0px -2px 2px rgba(0, 0, 0, .5));
+    		}
+    
+    		&.arrow-top:before {
+    			border-bottom-color: white;
+    			margin-left: -26px;
+    		}
+    
+    		&.arrow-bottom:after {
+    			border-top-color: white;
+    			margin-left: -25px;
+    			-webkit-filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, .5));
+    		}
+    
+    		&.arrow-bottom:before {
+    			border-top-color: white;
+    			margin-left: -26px;
+    		}
+    
+    		&.arrow-left:after {
+    			border-right-color: white;
+    			margin-top: -25px;
+    			-webkit-filter: drop-shadow(-2px 0px 2px rgba(0, 0, 0, .5));
+    		}
+    
+    		&.arrow-left:before {
+    			border-right-color: white;
+    			margin-top: -26px;
+    		}
+    
+    		&.arrow-right:after {
+    			border-left-color: white;
+    			margin-top: -25px;
+    			-webkit-filter: drop-shadow(2px 0px 2px rgba(0, 0, 0, .5));
+    		}
+    
+    		&.arrow-right:before {
+    			border-left-color: white;
+    			margin-top: -26px;
+    		}
+    		*/ }
     .step-holder .step-text.hinted {
       background: linear-gradient(to top, #a23f48 0%, #d31f41 80%, #c6081d 90%, #eea196 100%);
       transition: background-color .5s ease-in-out; }
+  .step-holder .step-arrow:after, .step-holder .step-arrow:before {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none; }
+  .step-holder .step-arrow {
+    position: absolute; }
+    .step-holder .step-arrow.arrow-top:after, .step-holder .step-arrow.arrow-top:before {
+      bottom: 100%;
+      left: 50%;
+      transform-origin: 0 50%; }
+    .step-holder .step-arrow.arrow-bottom:after, .step-holder .step-arrow.arrow-bottom:before {
+      top: 100%;
+      left: 50%;
+      transform-origin: 0 50%; }
+    .step-holder .step-arrow.arrow-left:after, .step-holder .step-arrow.arrow-left:before {
+      right: 100%;
+      top: 50%; }
+    .step-holder .step-arrow.arrow-right:after, .step-holder .step-arrow.arrow-right:before {
+      left: 100%;
+      top: 50%; }
+    .step-holder .step-arrow.arrow-top:after {
+      border-bottom-color: white;
+      margin-left: -25px;
+      -webkit-filter: drop-shadow(0px -2px 2px rgba(0, 0, 0, 0.5)); }
+    .step-holder .step-arrow.arrow-top:before {
+      border-bottom-color: white;
+      margin-left: -26px; }
+    .step-holder .step-arrow.arrow-bottom:after {
+      border-top-color: white;
+      margin-left: -25px;
+      -webkit-filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5)); }
+    .step-holder .step-arrow.arrow-bottom:before {
+      border-top-color: white;
+      margin-left: -26px; }
+    .step-holder .step-arrow.arrow-left:after {
+      border-right-color: white;
+      margin-top: -25px;
+      -webkit-filter: drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.5)); }
+    .step-holder .step-arrow.arrow-left:before {
+      border-right-color: white;
+      margin-top: -26px; }
+    .step-holder .step-arrow.arrow-right:after {
+      border-left-color: white;
+      margin-top: -25px;
+      -webkit-filter: drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.5)); }
+    .step-holder .step-arrow.arrow-right:before {
+      border-left-color: white;
+      margin-top: -26px; }
+  .step-holder .step-arrow:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-width: 25px; }
+  .step-holder .step-arrow:before {
+    border-color: rgba(255, 255, 255, 0);
+    border-width: 26px; }
   .step-holder .step-image {
     position: absolute; }
     .step-holder .step-image.tall {

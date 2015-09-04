@@ -83,7 +83,7 @@ var Step = React.createClass({
 			if (this.props.started) {
 				this.showTextAndTarget();
 
-				if (!this.audioPlayed) {
+				if (!this.audioPlayed && !this.complete) {
 					this.playAudio();
 				}
 			}
@@ -146,6 +146,14 @@ var Step = React.createClass({
 				$(txt).addClass("animated fadeIn").show(0);
 		}
 
+		if (this.refs.myArrow) {
+			var arrow = this.refs.myArrow.getDOMNode();
+			$(arrow).hide(0).removeClass("animated fadeInLeft fadeInRight fadeInDown fadeInUp");
+
+			if (!this.props.finished)
+				$(arrow).addClass("animated fadeIn").show(0);
+		}
+
 		if (this.refs.myHotspot) {
 			var hotspot = this.refs.myHotspot.getDOMNode();
 			if (this.props.mode == "watch") {
@@ -185,16 +193,24 @@ var Step = React.createClass({
 		}
 
 		var audio;
-		if (this.props.audio)
-			audio = <audio ref="myAudio"><source src={this.props.audio}></source></audio>;
+		if (this.props.audio) {
+			audio = <audio ref="myAudio">
+				<source src={this.props.audio}></source>
+			</audio>;
+		}
 
 		function createMarkup (html) {
 			return { __html: $(html).html() };
 		}
 
+		var textToUse = this.props.shortText ? "<p>" + this.props.shortText + "</p>" : this.props.text;
+
 		if (!this.props.started) {
+			// NOTE: need audio here for duration calculations and onCurrentStep triggering
+
 			return (
 				<div className={classes} onClick={this.onClickStep}>
+					{audio}
 					<img ref="myImage" className="step-image" src={this.props.image}/>
 				</div>
 			);
@@ -205,7 +221,8 @@ var Step = React.createClass({
 					<img ref="myImage" className="step-image" src={this.props.image}/>
 					<Hotspot ref="myHotspot" scale={this.state.scale} rect={this.props.rect} trigger={this.props.trigger} mode={this.props.mode} onStepComplete={this.onStepComplete} onStepHint={this.showHint}
 						input={this.props.input} />
-					<p ref="myText" className="step-text inviso" dangerouslySetInnerHTML={createMarkup(this.props.text)}></p>
+					<p ref="myText" className="step-text inviso" dangerouslySetInnerHTML={createMarkup(textToUse)}></p>
+					<div className="step-arrow" ref="myArrow"></div>
 				</div>
 			);
 		}
@@ -269,23 +286,77 @@ var Step = React.createClass({
 
 			switch (largest) {
 				case "left":
-					my = "right-20 center"; at = "left center"; arrows = "arrow arrow-right"; break;
+					my = "right-20 center"; at = "left center"; arrows = "arrow arrow-right";
+					break;
 				case "top":
-					my = "center bottom-20"; at = "center top"; arrows = "arrow arrow-bottom"; break;
+					my = "center bottom-20"; at = "center top"; arrows = "arrow arrow-bottom";
+					break;
 				case "right":
-					my = "left+20 center"; at = "right center"; arrows = "arrow arrow-left"; break;
+					my = "left+20 center"; at = "right center"; arrows = "arrow arrow-left";
+					break;
 				case "bottom":
-					my = "center top+20"; at = "center bottom"; arrows = "arrow arrow-top"; break;
+					my = "center top+20"; at = "center bottom"; arrows = "arrow arrow-top";
+					break;
 			}
 
 			// make the hotspot visible so it can be positioned around
+			var current = $(hotspot).css("display");
+
 			$(hotspot).css("display", "block");
 
-			$(txt).removeClass("arrow-right arrow-bottom arrow-left arrow-top").show(0).position({my: my, at: at, of: hotspot, collision: "fit"}).hide(0).addClass(arrows);
+			$(txt).show(0).position({my: my, at: at, of: hotspot, collision: "fit"});
 
-			$(hotspot).css("display", "none");
+			var box_rect = $(txt)[0].getBoundingClientRect();
+			var txt_height = $(txt).outerHeight();
+			var txt_width = $(txt).width();
+
+			var arrow = this.refs.myArrow.getDOMNode();
+			var txtPos = $(txt).offset();
+
+			$(arrow).removeClass("arrow-right arrow-bottom arrow-left arrow-top").addClass(arrows);
+
+			$(txt).hide(0);
+			$(arrow).hide(0);
+
+			$(hotspot).css("display", current);
 
 			this.textDirection = largest;
+
+			// align arrows to the middle of the hotspot
+
+			var offset = undefined, direction = "";
+
+			switch (largest) {
+				case "left":
+					var box_mid = box_rect.top + box_rect.height * .5;
+					var hotspot_rect = $(hotspot)[0].getBoundingClientRect();
+					var hotspot_mid = hotspot_rect.top + hotspot_rect.height * .5;
+					offset = Math.round(hotspot_mid - box_rect.top);
+					$(arrow).css({ left: txtPos.left + txt_width, top: txtPos.top + offset });
+					break;
+				case "right":
+					var box_mid = box_rect.top + box_rect.height * .5;
+					var hotspot_rect = $(hotspot)[0].getBoundingClientRect();
+					var hotspot_mid = hotspot_rect.top + hotspot_rect.height * .5;
+					offset = Math.round(hotspot_mid - box_rect.top);
+					$(arrow).css({ left: txtPos.left - 22, top: txtPos.top + offset });
+					break;
+				case "top":
+					var box_mid = box_rect.left + box_rect.width * .5;
+					var hotspot_rect = $(hotspot)[0].getBoundingClientRect();
+					var hotspot_mid = hotspot_rect.left + hotspot_rect.width * .5;
+					offset = Math.round(hotspot_mid - box_rect.left);
+					$(arrow).css({ left: txtPos.left - 25 + offset, top: txtPos.top + txt_height });
+					break;
+				case "bottom":
+					var box_mid = box_rect.left + box_rect.width * .5;
+					var hotspot_rect = $(hotspot)[0].getBoundingClientRect();
+					var hotspot_mid = hotspot_rect.left + hotspot_rect.width * .5;
+					offset = Math.round(hotspot_mid - box_rect.left);
+					if (Math.abs(offset - box_mid) < 5) offset = undefined;
+					$(arrow).css({ left: txtPos.left - 25 + offset, top: txtPos.top });
+					break;
+			}
 		} else {
 			$(txt).position({my: "center center", at: "center center", of: holder, collision: "fit"});
 		}
@@ -305,8 +376,13 @@ var Step = React.createClass({
 				animation = "fadeInUp"; break;
 		}
 
-		var txt = $(this.refs.myText.getDOMNode());
-		txt.removeClass("animated fadeIn").hide(0).addClass("hinted animated " + animation).show(0);
+		if (this.refs.myText) {
+			var txt = $(this.refs.myText.getDOMNode());
+			txt.removeClass("animated fadeIn").hide(0).addClass("hinted animated " + animation).show(0);
+
+			var arrow = $(this.refs.myArrow.getDOMNode());
+			arrow.removeClass("animated fadeIn").hide(0).addClass("animated " + animation).show(0);
+		}
 	},
 
 	pause: function () {
