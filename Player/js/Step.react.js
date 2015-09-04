@@ -306,12 +306,11 @@ var Step = React.createClass({
 
 			$(txt).show(0).position({my: my, at: at, of: hotspot, collision: "fit"});
 
-			var box_rect = $(txt)[0].getBoundingClientRect();
+			var txt_pos = $(txt).position();
 			var txt_height = $(txt).outerHeight();
-			var txt_width = $(txt).width();
+			var txt_width = $(txt).outerWidth();
 
 			var arrow = this.refs.myArrow.getDOMNode();
-			var txtPos = $(txt).offset();
 
 			$(arrow).removeClass("arrow-right arrow-bottom arrow-left arrow-top").addClass(arrows);
 
@@ -328,33 +327,28 @@ var Step = React.createClass({
 
 			switch (largest) {
 				case "left":
-					var box_mid = box_rect.top + box_rect.height * .5;
-					var hotspot_rect = $(hotspot)[0].getBoundingClientRect();
-					var hotspot_mid = hotspot_rect.top + hotspot_rect.height * .5;
-					offset = Math.round(hotspot_mid - box_rect.top);
-					$(arrow).css({ left: txtPos.left + txt_width, top: txtPos.top + offset });
+					var box_mid = txt_pos.top + txt_height * .5;
+					var hotspot_mid = $(hotspot).position().top + $(hotspot).height() * .5;
+					offset = Math.round(hotspot_mid - txt_pos.top);
+					$(arrow).css({ left: txt_pos.left + txt_width, top: txt_pos.top + offset });
 					break;
 				case "right":
-					var box_mid = box_rect.top + box_rect.height * .5;
-					var hotspot_rect = $(hotspot)[0].getBoundingClientRect();
-					var hotspot_mid = hotspot_rect.top + hotspot_rect.height * .5;
-					offset = Math.round(hotspot_mid - box_rect.top);
-					$(arrow).css({ left: txtPos.left - 22, top: txtPos.top + offset });
+					var box_mid = txt_pos.top + txt_height * .5;
+					var hotspot_mid = $(hotspot).position().top + $(hotspot).height() * .5;
+					offset = Math.round(hotspot_mid - txt_pos.top);
+					$(arrow).css({ left: txt_pos.left, top: txt_pos.top + offset });
 					break;
 				case "top":
-					var box_mid = box_rect.left + box_rect.width * .5;
-					var hotspot_rect = $(hotspot)[0].getBoundingClientRect();
-					var hotspot_mid = hotspot_rect.left + hotspot_rect.width * .5;
-					offset = Math.round(hotspot_mid - box_rect.left);
-					$(arrow).css({ left: txtPos.left - 25 + offset, top: txtPos.top + txt_height });
+					var box_mid = txt_pos.left + txt_width * .5;
+					var hotspot_mid = $(hotspot).position().left + $(hotspot).width() * .5;
+					offset = Math.round(hotspot_mid - txt_pos.left);
+					$(arrow).css({ left: txt_pos.left + offset, top: txt_pos.top + txt_height });
 					break;
 				case "bottom":
-					var box_mid = box_rect.left + box_rect.width * .5;
-					var hotspot_rect = $(hotspot)[0].getBoundingClientRect();
-					var hotspot_mid = hotspot_rect.left + hotspot_rect.width * .5;
-					offset = Math.round(hotspot_mid - box_rect.left);
-					if (Math.abs(offset - box_mid) < 5) offset = undefined;
-					$(arrow).css({ left: txtPos.left - 25 + offset, top: txtPos.top });
+					var box_mid = txt_pos.left + txt_width * .5;
+					var hotspot_mid = $(hotspot).position().left + $(hotspot).width() * .5;
+					offset = Math.round(hotspot_mid - txt_pos.left);
+					$(arrow).css({ left: txt_pos.left + offset, top: txt_pos.top });
 					break;
 			}
 		} else {
