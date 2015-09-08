@@ -41,13 +41,14 @@ var PlayerApp = React.createClass({
 	},
 
 	onResize: function () {
-		var wh = $(window).outerHeight();
+		var wh = $(window).outerHeight() - 50;
 		var qp = $(".que-player");
 
 		// assuming 4:3
 		var ww = (wh * (4/3));
 
-		qp.height(wh).width(ww);
+		// NOTE: not sure about this sizing logic
+		qp.height(wh).width("100%");
 
 		this.setState( { size: { width: ww, height: wh } } );
 	},
@@ -60,12 +61,10 @@ var PlayerApp = React.createClass({
 		if (this.state.started) {
 			$("body").css("background-color", "rgba(0, 0, 0, 0)");
 		} else {
-			$("body").css("background-color", "black");
+			//$("body").css("background-color", "black");
 		}
-	},
 
-	createTask: function (item, index) {
-		return <Task {...item} key={index}></Task>
+		this.refreshPlayButton();
 	},
 
 	showCurrentTask: function () {
@@ -90,6 +89,11 @@ var PlayerApp = React.createClass({
 		return (
 			<div className="que-player">
 				{ this.showCurrentTask() }
+				<div className="playbar">
+					<button className="btn btn-success" onClick={this.onClickPrevious}><i className="fa fa-backward"></i></button>
+					<button className="btn btn-info" onClick={this.onClickPause}><i ref="myPlayButton" className="fa fa-play"></i></button>
+					<button className="btn btn-success" onClick={this.onClickNext}><i className="fa fa-forward"></i></button>
+				</div>
 			</div>
 		);
 	},
@@ -112,6 +116,8 @@ var PlayerApp = React.createClass({
 		} else {
 			this.pause();
 		}
+
+		console.log("on toggle pause " + this.paused);
 	},
 
 	trigger: function (event, params) {
@@ -134,6 +140,8 @@ var PlayerApp = React.createClass({
 	},
 
 	start: function () {
+		this.paused = false;
+
 		this.setState( { started: true } );
 	},
 
@@ -173,6 +181,40 @@ var PlayerApp = React.createClass({
 		if (this.refs.myTask) {
 			this.start();
 			this.refs.myTask.gotoStep(key);
+		}
+	},
+
+	onClickPrevious: function () {
+		if (this.refs.myTask) {
+			this.refs.myTask.onClickPrevStep();
+		}
+	},
+
+	onClickNext: function () {
+		if (this.refs.myTask) {
+			this.refs.myTask.onClickNextStep();
+		}
+	},
+
+	onClickPause: function () {
+		if (!this.state.started) {
+			this.start();
+		} else {
+			this.onTogglePause();
+		}
+
+		this.refreshPlayButton();
+	},
+
+	refreshPlayButton: function () {
+		if (this.refs.myPlayButton) {
+			var btn = $(this.refs.myPlayButton.getDOMNode());
+
+			if (this.paused || !this.state.started) {
+				btn.removeClass("fa-pause").addClass("fa-play");
+			} else {
+				btn.removeClass("fa-play").addClass("fa-pause");
+			}
 		}
 	}
 });

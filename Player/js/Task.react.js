@@ -142,11 +142,21 @@ var Task = React.createClass({
 	},
 
 	onClickPrevStep: function () {
-		this.doRewind();
+		if (this.props.started && !this.state.finished) {
+			var currentIndex = this.getIndexOfStep(this.state.currentStep);
+			if (currentIndex > 0) {
+				this.doRewind();
+			}
+		}
 	},
 
 	onClickNextStep: function () {
-		this.doAdvance();
+		if (this.props.started && !this.state.finished) {
+			var currentIndex = this.getIndexOfStep(this.state.currentStep);
+			if (currentIndex < this.getNumberOfSteps() - 1) {
+				this.doAdvance();
+			}
+		}
 	},
 
 	getNumberOfSteps: function () {

@@ -4,7 +4,7 @@ html {
 body {
 	font-family: 'Helvetica Neue', Helvetica, sans-serif;
 	background: url(../images/ique-logo.png) no-repeat;
-	background-color: black;
+	/*background-color: black;*/
 	transition: background-color 1s linear;
 	background-position: center center;
 	margin: 0;
@@ -24,6 +24,14 @@ body {
 	height: 600px;
 	position: relative;
 	/*overflow: hidden;*/
+
+	.playbar {
+		margin-top: 5px;
+		text-align: center;
+		background-color: #BEBFAE;
+		padding: 5px 0;
+		border-radius: 5px;
+	}
 }
 
 .que-task {
