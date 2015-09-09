@@ -116,8 +116,6 @@ var PlayerApp = React.createClass({
 		} else {
 			this.pause();
 		}
-
-		console.log("on toggle pause " + this.paused);
 	},
 
 	trigger: function (event, params) {
@@ -137,6 +135,8 @@ var PlayerApp = React.createClass({
 		}
 
 		this.paused = true;
+
+		this.refreshPlayButton();
 	},
 
 	start: function () {
@@ -155,6 +155,8 @@ var PlayerApp = React.createClass({
 		}
 
 		this.paused = false;
+
+		this.refreshPlayButton();
 	},
 
 	addEventListener (event, callback) {
