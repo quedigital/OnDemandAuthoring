@@ -1,3 +1,5 @@
+// TODO: "how to use" overlay
+// TODO: "continue" trigger [or is "None"] sufficient?
 // TODO: entering formula lesson, try it restarts watch it [narrower window problem, translation/position issue]
 // TODO: last step audio is playing twice (if you click before the audio is done) [fixed?]
 // TODO: delay hint in case it's an impending double-click
@@ -43,3 +45,5 @@
 // DONE: delay mouse based on audio (may have to wait for audio to load to determine duration)
 // DONE: separate callout text for interactive side [shortText; entered as text, html would require more work]
 // DONE: are the arrows supposed to be offset to point to the exact spot?
+// DONE: server publishing [ManageIt? No: Google Drive]
+// DONE: callout widget -> Habitat [icon for Pattern]

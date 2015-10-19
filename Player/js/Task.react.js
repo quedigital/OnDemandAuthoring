@@ -189,8 +189,11 @@ var Task = React.createClass({
 	},
 
 	gotoStep: function (key) {
+		createjs.Tween.removeAllTweens();
+
 		var step = this.props.steps[key];
 		if (step) {
+			this.resume();
 			this.setState({ finished: false, currentStep: key });
 		}
 	},

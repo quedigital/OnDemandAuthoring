@@ -10,6 +10,11 @@ var Step = React.createClass({
 
 		var scale;
 
+		// THEORY: assuming all images are "wide" format to stop images from running over if different aspect ratios are used
+		$(img).addClass("wide");
+		scale = $(img).width() / img.naturalWidth;
+
+		/*
 		var aspect = img.naturalWidth / img.naturalHeight;
 		if (aspect < 1.333) {
 			$(img).addClass("wide");
@@ -18,6 +23,7 @@ var Step = React.createClass({
 			$(img).addClass("tall");
 			scale = $(img).height() / img.naturalHeight;
 		}
+		*/
 
 		// Only report changed size to avoid infinite recursion
 		if (img.height && this.state.scale !== scale) {
