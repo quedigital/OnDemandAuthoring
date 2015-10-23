@@ -253,7 +253,7 @@ var Task = React.createClass({
 	},
 
 	setupForStep: function () {
-		if (this.props.mode == "watch" && this.props.started) {
+		if (this.props.mode == "watch" && this.props.started && !this.state.finished) {
 			var step = this.getCurrentStep();
 
 			if (step && step.props.rect) {
@@ -261,11 +261,21 @@ var Task = React.createClass({
 				var myMouse = this.refs.myMouse;
 				var cursor = $(myMouse.getDOMNode());
 
+				var el = $(this.getDOMNode()).find(".step-holder");
+
+				// THEORY: don't use the last mouse position, just use the center of the element
+				this.lastMouse = { x: el.width() * .5, y: el.height() * .5 };
+				cursor.css({ left: this.lastMouse.x, top: this.lastMouse.y });
+
 				var distance = Math.sqrt((center.x - this.lastMouse.x) * (center.x - this.lastMouse.x) + (center.y - this.lastMouse.y) * (center.y - this.lastMouse.y));
 				// THEORY: cursor speed is based on window height
 				var time = Math.max((distance / $(window).height()) * 3000, 1000);
 
 				var delay = Math.max(step.getAudioDuration() - 250, 0);
+
+				// use some defaults in case something has gone awry
+				if (isNaN(time)) time = 500;
+				if (isNaN(delay)) delay = 2000;
 
 				// NOTE: don't set up the cursor animation until we have an audio duration
 				if (!isNaN(delay) && (center.x != this.lastMouse.x || center.y != this.lastMouse.y) ) {
@@ -273,8 +283,15 @@ var Task = React.createClass({
 						.set({display: "none"}, cursor[0].style)
 						.wait(delay)
 						.set({display: "block", left: this.lastMouse.x, top: this.lastMouse.y}, cursor[0].style)
-						.to({left: center.x, top: center.y}, time, createjs.Ease.quadInOut)
-						.call(this.doTrigger, null, this);
+						.to({left: center.x, top: center.y}, time, createjs.Ease.quadInOut);
+						//.call(this.doTrigger, null, this);
+
+					if (this.taskAdvance) {
+						clearTimeout(this.taskAdvance);
+					}
+
+					// using a timeout instead of the tween (b/c tween seemed buggy, perhaps)
+					this.taskAdvance = setTimeout($.proxy(this.doTrigger, this), delay + time);
 
 					this.lastMouse.x = center.x;
 					this.lastMouse.y = center.y;
