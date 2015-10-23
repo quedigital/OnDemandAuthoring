@@ -290,7 +290,7 @@ var Task = React.createClass({
 						clearTimeout(this.taskAdvance);
 					}
 
-					// using a timeout instead of the tween (b/c tween seemed buggy, perhaps)
+					// using a timeout instead of the tween (because tween seemed buggy, perhaps)
 					this.taskAdvance = setTimeout($.proxy(this.doTrigger, this), delay + time);
 
 					this.lastMouse.x = center.x;
