@@ -1,0 +1,58 @@
+// TODO: use just 1 iframe for both watch and try (changing modes as necessary)
+// TODO: arrows are not always showing up (covered by textbox)
+// TODO: make sure previous/next advance step text (on left)
+// TODO: "how to use" overlay
+// TODO: make the continue button show up when there's no trigger (and/or no audio?)
+// TODO: "continue" trigger [or is "None"] sufficient?
+// TODO: entering formula lesson, try it restarts watch it [narrower window problem, translation/position issue]
+// TODO: last step audio is playing twice (if you click before the audio is done) [fixed?]
+// TODO: delay hint in case it's an impending double-click
+// TODO: support iPad for interaction (double-click, hover, etc)
+// TODO: support drag-and-drop, text interaction
+
+//---------------------------------------------------------------------------------------
+
+// DONE: make text boxes green
+// DONE: animate text boxes
+// DONE: animate button
+// DONE: add pointer arrows to callout (library function?)
+// DONE: narration
+// DONE: stop audio when changing steps
+// DONE: hint/error messages
+// DONE: interactivity types (click, double-click, hover, drag and drop, text, no-delay, etc)
+// DONE: watch versus try
+// DONE: "watch" mode: cursor
+// DONE: "click", "double-click" effect
+// DONE: watch/try buttons
+// DONE: figure out how to style the target boxes
+// DONE: end of lesson screen (fade out?)
+// DONE: reset "hinted" class (during render? update?)
+// DONE: click Prev/Next leaves tweens running?
+// DONE: Hotspot and Mousetrail aren't always initialized with the correct scale [changed Step.didUpdate; maybe that fixed it?]
+// DONE: don't hard-code path for loading player data
+// DONE: trigger step notifications (for the Framework highlighting)
+// DONE: convert Markdown for steps
+// DONE: don't replay audio during resize [replays from start if it hasn't finished playing yet]
+// TODONT: still not aligning boxes correctly on resize [I think this is fixed now]
+// DONE: renamed Player to player
+// DONE: size to fit available area (even for non-4x3 background images)
+// DONE: enter for watch it
+// DONE: show an ENTER key animation
+// DONE: only send current step when "started"
+// DONE: start cursor over at center of screen
+// DONE: BUG: when repeating task, last arrow is not in the right place
+// DONE: hold image on last step when done
+// DONE: show "Watch It" or "Try It" on the play screen
+// DONE: text input
+// DONE: text input for Watch
+// DONE: hotspots are still not sized correctly on initial load [visibility]
+// DONE: delay mouse based on audio (may have to wait for audio to load to determine duration)
+// DONE: separate callout text for interactive side [shortText; entered as text, html would require more work]
+// DONE: are the arrows supposed to be offset to point to the exact spot?
+// DONE: server publishing [ManageIt? No: Google Drive]
+// DONE: callout widget -> Habitat [icon for Pattern]
+// DONE: pause on resize
+// DONE: repeat step audio if unpausing when it hasn't played completely
+// DONE: set the "finished" value for a task when it's complete
+// DONE: stop timers when pause is hit
+// DONE: "none" trigger supported
