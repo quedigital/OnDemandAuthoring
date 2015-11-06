@@ -28,7 +28,7 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 
 //				return <Step {...item} myKey={index} ref={this.onRef} current={current} key={index} onAudioComplete={this.onAudioComplete} onStepComplete={this.onStepComplete} onCurrent={this.onCurrentStep} mode={this.props.mode} lastMouse={this.lastMouse} started={this.props.started} finished={this.state.finished}></Step>
 
-					var step = new Step( { mode: this.options.mode, data: stepData, task: this } );
+					var step = new Step( { mode: this.options.mode, data: stepData, task: this, key: each } );
 					stepholder.append(step.getDOM());
 					this.steps.push(step);
 				}
@@ -91,12 +91,13 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 
 		refresh: function () {
 			for (var i = 0; i < this.steps.length; i++) {
+				var step = this.steps[i];
 				var current = i == this.currentStep;
-				this.steps[i].refresh( { isCurrent: current } );
+				step.refresh( { isCurrent: current } );
 
 				if (this.getValue("started") && !this.getValue("paused")) {
 					if (current) {
-						this.playStep(this.steps[i]);
+						this.playStep(step);
 					}
 				}
 			}
@@ -104,6 +105,13 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 			this.myMouse.getDOM().hide(0);
 
 			this.positionButtons();
+
+			if (this.options.player) {
+				var step = this.getCurrentStep();
+				if (step) {
+					this.options.player.onCurrentStep(step.key);
+				}
+			}
 		},
 
 		playCursor: function (step) {
@@ -287,6 +295,13 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 				.wait(500)
 				.call(this.onCursorComplete, null, this)
 				.call($.proxy(this.showEnterKey, this, false));
+		},
+
+		typeText: function () {
+			var step = this.getCurrentStep();
+			if (step) {
+				step.typeText();
+			}
 		},
 
 		showEnterKey: function (visible) {

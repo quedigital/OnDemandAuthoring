@@ -185,6 +185,14 @@ define(["./Task"], function (Task) {
 			this.pause();
 		},
 
+		onCurrentStep: function (step_key) {
+			if (this.getValue("started")) {
+				var params = {key: step_key};
+
+				this.trigger("CPAPI_SLIDEENTER", params);
+			}
+		},
+
 		trigger: function (event, params) {
 			for (var i = 0; i < this.listeners.length; i++) {
 				var l = this.listeners[i];

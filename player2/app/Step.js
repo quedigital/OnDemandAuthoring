@@ -5,6 +5,8 @@ define(["./Hotspot"], function (Hotspot) {
 		this.data = options.data;
 		this.task = options.task;
 
+		this.key = options.key;
+
 		this.scale = 1;
 
 		this.isCurrent = false;
@@ -13,6 +15,34 @@ define(["./Hotspot"], function (Hotspot) {
 
 	Step.prototype = {
 		constructor: Step,
+
+		applyImageScale: function () {
+			var img = this.img;
+
+			// THEORY: assuming all images are "wide" format to stop images from running over if different aspect ratios are used
+			$(img).addClass("wide");
+			this.scale = img.width() / img[0].naturalWidth;
+
+			this.hotspot.setScale(this.scale);
+
+			/*
+			 var aspect = img.naturalWidth / img.naturalHeight;
+			 if (aspect < 1.333) {
+			 $(img).addClass("wide");
+			 scale = $(img).width() / img.naturalWidth;
+			 } else {
+			 $(img).addClass("tall");
+			 scale = $(img).height() / img.naturalHeight;
+			 }
+			 */
+
+			// Only report changed size to avoid infinite recursion
+			/*
+			if (img.height && this.state.scale !== scale) {
+				this.setState({ scale: scale });
+			}
+			*/
+		},
 
 		getDOM: function () {
 			var classes = "step";
@@ -42,7 +72,8 @@ define(["./Hotspot"], function (Hotspot) {
 				this.audio = a;
 			}
 
-			var img = $("<img>", { src: this.data.image });
+			var img = $("<img>", { src: this.data.image, class: "step-image" });
+			this.img = img;
 			div.append(img);
 
 			var hotspot = new Hotspot( { step: this, trigger: this.data.trigger, rect: this.data.rect, scale: this.scale } );
@@ -82,6 +113,8 @@ define(["./Hotspot"], function (Hotspot) {
 			} else {
 				this.el.hide(0);
 			}
+
+			this.applyImageScale();
 
 			this.positionText();
 
@@ -280,7 +313,7 @@ define(["./Hotspot"], function (Hotspot) {
 		},
 
 		stopAudio: function () {
-			if (this.audio) {
+			if (this.audio && this.audio[0].src) {
 				this.audio[0].currentTime = 0;
 				this.audio[0].pause();
 			}
@@ -352,7 +385,14 @@ define(["./Hotspot"], function (Hotspot) {
 		isStarted: function () {
 			if (this.task) return this.task.getValue("started");
 			else return false;
+		},
+
+		typeText: function () {
+			var hotspot = this.hotspot.getDOM();
+
+			hotspot.typeText();
 		}
+
 	};
 
 	return Step;

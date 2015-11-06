@@ -1,4 +1,5 @@
-// TODO: use just 1 iframe for both watch and try (changing modes as necessary)
+// TODO: use just 1 iframe for both watch and try (changing modes as necessary) [getDOM will need to be refreshed, possibly for the different modes?]
+// TODO: animate.css still seemed to trigger after I'd hit pause
 // TODO: arrows are not always showing up (covered by textbox)
 // TODO: make sure previous/next advance step text (on left)
 // TODO: "how to use" overlay
@@ -51,8 +52,11 @@
 // DONE: are the arrows supposed to be offset to point to the exact spot?
 // DONE: server publishing [ManageIt? No: Google Drive]
 // DONE: callout widget -> Habitat [icon for Pattern]
+// DONE: started refactor without React.js
 // DONE: pause on resize
 // DONE: repeat step audio if unpausing when it hasn't played completely
 // DONE: set the "finished" value for a task when it's complete
 // DONE: stop timers when pause is hit
 // DONE: "none" trigger supported
+// DONE: text input [re-done but untested]
+// DONE: scaling

@@ -13,19 +13,33 @@ define([], function () {
 	Hotspot.prototype = {
 		constructor: Hotspot,
 
+		setScale: function (scale) {
+			this.options.scale = scale;
+
+			this.applyScale();
+		},
+
+		applyScale: function () {
+			if (this.options && this.options.rect) {
+				var rect = this.options.rect.split(",");
+
+				this.el.css({
+					left: Math.round(rect[0] * this.options.scale),
+					top: Math.round(rect[1] * this.options.scale),
+					width: Math.round(rect[2] * this.options.scale),
+					height: Math.round(rect[3] * this.options.scale)
+				});
+			}
+		},
+
 		getDOM: function () {
 			if (!this.el) {
 				var div = $("<div>", {class: "step-hotspot"});
 
-				if (this.options && this.options.rect) {
-					var rect = this.options.rect.split(",");
+				this.el = div;
 
-					div.css({
-						left: Math.round(rect[0] * this.options.scale),
-						top: Math.round(rect[1] * this.options.scale),
-						width: Math.round(rect[2] * this.options.scale),
-						height: Math.round(rect[3] * this.options.scale)
-					});
+				if (this.options && this.options.rect) {
+					this.applyScale();
 
 					div.click($.proxy(this.onClickHotspot, this));
 					div.dblclick($.proxy(this.onDoubleClickHotspot, this));
@@ -34,19 +48,23 @@ define([], function () {
 					if (this.options.trigger == "text") {
 						var inputBox = $("<input>", {class: "input-box"});
 						inputBox.on("change", $.proxy(this.onChangeText, this));
-
+						this.inputBox = inputBox;
 						div.append(inputBox);
 					}
 				}
-
-				this.el = div;
 			}
 
 			return this.el;
 		},
 
 		onChangeText: function (evt) {
-			console.log("change text");
+			if (this.options.mode == "try" && this.options.trigger == "text") {
+				var targetText = this.options.input.toUpperCase();
+				var curText = this.inputBox.val().toUpperCase();
+				if (targetText == curText) {
+					this.options.step.onComplete({ step: this, advance: true });
+				}
+			}
 		},
 
 		onClickHotspot: function (evt) {
@@ -90,6 +108,19 @@ define([], function () {
 			if (this.options.trigger == "hover") {
 				this.options.step.onComplete({ step: this, advance: true });
 			}
+		},
+
+		typeText: function () {
+			var me = this;
+			var params = { step: this, advance: true };
+
+			var text = this.options.input;
+
+			createjs.Tween.get(this.inputBox)
+				.wait(750)
+				.call(function () { me.inputBox.val(text); })
+				.wait(750)
+				.call($.proxy(this.options.step.onComplete, this.options.step, params));
 		}
 	};
 
