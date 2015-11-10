@@ -108,17 +108,19 @@ define(["./Hotspot"], function (Hotspot) {
 		},
 
 		refresh: function (options) {
-			if (options.isCurrent) {
-				this.el.show(0);
-			} else {
-				this.el.hide(0);
-			}
+			this.el.show(0);
 
 			this.applyImageScale();
 
 			this.positionText();
 
 			this.isCurrent = options.isCurrent;
+
+			if (options.isCurrent || options.isLast) {
+				this.el.show(0);
+			} else {
+				this.el.hide(0);
+			}
 		},
 
 		onKeyDown: function (evt) {
@@ -166,7 +168,7 @@ define(["./Hotspot"], function (Hotspot) {
 		},
 
 		onClickStep: function (evt) {
-			//if (this.props.finished) return;
+			if (this.isFinished()) return;
 			if (!this.isStarted()) return;
 
 			if (this.options.mode == "try") {
@@ -180,6 +182,8 @@ define(["./Hotspot"], function (Hotspot) {
 		},
 
 		positionText: function () {
+			this.textBox.hide(0).removeClass("inviso animated hinted fadeInLeft fadeInRight fadeInDown fadeInUp");
+
 			var me = this;
 
 			var holder = this.el.parents(".step-holder");
@@ -300,6 +304,7 @@ define(["./Hotspot"], function (Hotspot) {
 		loadAudio: function () {
 			// loading the audio this way seemed to work better cross-browser than putting it directly in the src
 			if (this.audio) {
+				this.audio.attr("src", null);
 				this.audio.attr("src", this.audio.attr("data-src"));
 			}
 		},
@@ -384,6 +389,11 @@ define(["./Hotspot"], function (Hotspot) {
 
 		isStarted: function () {
 			if (this.task) return this.task.getValue("started");
+			else return false;
+		},
+
+		isFinished: function () {
+			if (this.task) return this.task.getValue("finished");
 			else return false;
 		},
 

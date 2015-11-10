@@ -29,6 +29,9 @@ body {
     */
     padding: 5px 0; }
 
+.que-player.paused .step-hotspot {
+  opacity: 0 !important; }
+
 .que-task {
   height: 100%; }
   .que-task #continue-button {
@@ -167,7 +170,9 @@ body {
   position: absolute;
   display: none;
   transform: translate(-50%, -50%);
-  transform-origin: 50% 50%; }
+  transform-origin: 50% 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -webkit-transform-origin: 50% 50%; }
 
 .input-box {
   position: absolute;

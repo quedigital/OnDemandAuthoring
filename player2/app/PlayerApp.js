@@ -19,6 +19,8 @@ define(["./Task"], function (Task) {
 		this.steps = undefined;
 		this.size = { width: undefined, height: undefined };
 
+		this.setValue("interactedWith", false);
+
 		this.listeners = [];
 
 		// Captivate emulator
@@ -43,6 +45,7 @@ define(["./Task"], function (Task) {
 
 		createDOM: function () {
 			var div = $("<div>", { class: "que-player" } );
+			this.playerDiv = div;
 
 			var task = new Task( { player: this, mode: this.mode, steps: this.steps } );
 			div.append(task.getDOM());
@@ -99,7 +102,7 @@ define(["./Task"], function (Task) {
 
 		refreshPlayButton: function () {
 			if (this.playButton) {
-				if (this.paused || !this.getValue("started")) {
+				if (this.getValue("paused") || !this.getValue("started")) {
 					this.playButton.find("i").removeClass("fa-pause").addClass("fa-play");
 				} else {
 					this.playButton.find("i").removeClass("fa-play").addClass("fa-pause");
@@ -108,20 +111,24 @@ define(["./Task"], function (Task) {
 		},
 
 		onClickPrevious: function (evt) {
+			this.setValue("interactedWith", true);
+
 			this.task.onClickPreviousStep();
 		},
 
 		onClickPause: function (evt) {
 			if (!this.getValue("started")) {
 				this.start();
-
-				this.refresh();
+			} else if (this.getValue("finished")) {
+				this.start();
 			} else {
 				this.togglePause();
 			}
 		},
 
 		onClickNext: function (evt) {
+			this.setValue("interactedWith", true);
+
 			this.task.onClickNextStep();
 		},
 
@@ -133,35 +140,40 @@ define(["./Task"], function (Task) {
 			this.values[key] = value;
 
 			switch (key) {
-				case "started":
-					if (this.task) {
-						this.task.setValue("started", value);
+				case "paused":
+					if (this.playerDiv) {
+						if (value) {
+							this.playerDiv.removeClass("paused").addClass("paused");
+						} else {
+							this.playerDiv.removeClass("paused");
+						}
 					}
 					break;
-				case "finished":
-					if (this.task) {
-						this.task.setValue("finished", value);
-					}
+				case "interactedWith":
 					break;
 			}
 		},
 
 		start: function () {
+			this.setValue("interactedWith", true);
+
 			this.setValue("started", true);
 			this.setValue("finished", false);
 
-			this.paused = false;
+			this.setValue("paused", false);
 
 			this.task.setCurrentStep(0);
 			this.task.play();
+
+			this.onCurrentStep(this.getCurrentStepIndex());
 
 			this.refresh();
 		},
 
 		togglePause: function () {
-			this.paused = !this.paused;
+			this.setValue("paused", !this.getValue("paused"));
 
-			if (!this.paused) {
+			if (!this.getValue("paused")) {
 				this.task.play();
 			} else {
 				this.task.pause();
@@ -171,7 +183,7 @@ define(["./Task"], function (Task) {
 		},
 
 		pause: function () {
-			this.paused = true;
+			this.setValue("paused", true);
 
 			if  (this.task)
 				this.task.pause();
@@ -179,17 +191,34 @@ define(["./Task"], function (Task) {
 			this.refresh();
 		},
 
+		play: function () {
+			this.setValue("interactedWith", true);
+
+			this.setValue("started", true);
+			this.setValue("finished", false);
+
+			this.setValue("paused", false)
+
+			this.task.play();
+
+			this.refresh();
+		},
+
 		onComplete: function () {
+			this.setValue("finished", true);
+
 			this.trigger("QUE_COMPLETE");
 
 			this.pause();
 		},
 
 		onCurrentStep: function (step_key) {
-			if (this.getValue("started")) {
+			if (this.getValue("interactedWith")) {
 				var params = {key: step_key};
 
 				this.trigger("CPAPI_SLIDEENTER", params);
+
+				return true;
 			}
 		},
 
@@ -202,12 +231,14 @@ define(["./Task"], function (Task) {
 			}
 		},
 
-		addEventListener (event, callback) {
+		addEventListener: function (event, callback) {
 			this.listeners.push( { event: event, callback: callback } );
 		},
 
-		onClickRepeat: function () {
-			this.start();
+		getCurrentStep: function () {
+			if (this.task) {
+				return this.task.getCurrentStepIndex();
+			}
 		}
 	};
 

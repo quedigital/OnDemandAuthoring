@@ -8,8 +8,6 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 		this.steps = [];
 
 		this.currentStep = 0;
-
-		this.values = {};
 	}
 
 	Task.prototype = {
@@ -44,7 +42,7 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 
 				btn = $("<button>", { class: "btn", id: "overlay-button" }).hide(0);
 				btn.append($("<i>", { class: "fa fa-3x fa-repeat"}));
-				btn.click($.proxy(this.onClickRepeat, this));
+				btn.click($.proxy(this.onClickBigPlay, this));
 				this.overlayButton = btn;
 				div.append(btn);
 
@@ -74,11 +72,17 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 		},
 
 		getValue: function (key) {
-			return this.values[key];
+			var player = this.options.player;
+			if (player) {
+				return player.getValue(key);
+			}
 		},
 
 		setValue: function (key, value) {
-			this.values[key] = value;
+			var player = this.options.player;
+			if (player) {
+				player.setValue(key, value);
+			}
 		},
 
 		setCurrentStep: function (index) {
@@ -89,11 +93,18 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 			return this.steps[this.currentStep];
 		},
 
+		getCurrentStepIndex: function () {
+			return this.currentStep;
+		},
+
 		refresh: function () {
 			for (var i = 0; i < this.steps.length; i++) {
 				var step = this.steps[i];
+
 				var current = i == this.currentStep;
-				step.refresh( { isCurrent: current } );
+				var last = (i == this.steps.length - 1 && this.getValue("finished"));
+
+				step.refresh( { isCurrent: current, isLast: last } );
 
 				if (this.getValue("started") && !this.getValue("paused")) {
 					if (current) {
@@ -242,10 +253,10 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 			var cursor = this.myMouse.getDOM();
 			createjs.Tween.get(cursor[0])
 				.wait(100)
-				.set( { transform: "scale(.7)"}, cursor[0].style )
+				.set( { transform: "scale(.7)", "-webkit-transform": "scale(.7)" }, cursor[0].style )
 				.call(this.playClickSound, null, this)
 				.wait(100)
-				.set( { transform: "scale(1)"}, cursor[0].style )
+				.set( { transform: "scale(1)", "-webkit-transform": "scale(1)" }, cursor[0].style )
 				.wait(300)
 				.call(this.onCursorComplete, null, this);
 		},
@@ -254,15 +265,15 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 			var cursor = this.myMouse.getDOM();
 			createjs.Tween.get(cursor[0])
 				.wait(100)
-				.set( { transform: "scale(.7)"}, cursor[0].style )
+				.set( { transform: "scale(.7)", "-webkit-transform": "scale(.7)" }, cursor[0].style )
 				.call(this.playClickSound, null, this)
 				.wait(100)
-				.set( { transform: "scale(1)"}, cursor[0].style )
+				.set( { transform: "scale(1)", "-webkit-transform": "scale(1)" }, cursor[0].style )
 				.wait(150)
-				.set( { transform: "scale(.7)"}, cursor[0].style )
+				.set( { transform: "scale(.7)", "-webkit-transform": "scale(.7)" }, cursor[0].style )
 				.call(this.playClickSound, null, this)
 				.wait(100)
-				.set( { transform: "scale(1)"}, cursor[0].style )
+				.set( { transform: "scale(1)", "-webkit-transform": "scale(1)" }, cursor[0].style )
 				.wait(300)
 				.call(this.onCursorComplete, null, this);
 		},
@@ -288,10 +299,10 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 				.wait(750)
 				.call($.proxy(this.showEnterKey, this, true))
 				.wait(750)
-				.set( { transform: "translate(-50%, -50%) scale(.8)"}, this.enterKey[0].style )
+				.set( { transform: "translate(-50%, -50%) scale(.8)", "-webkit-transform": "translate(-50%, -50%) scale(.8)" }, this.enterKey[0].style )
 				.call(this.playClickSound, null, this)
 				.wait(100)
-				.set( { transform: "translate(-50%, -50%) scale(1)"}, this.enterKey[0].style )
+				.set( { transform: "translate(-50%, -50%) scale(1)", "-webkit-transform": "translate(-50%, -50%) scale(1)" }, this.enterKey[0].style )
 				.wait(500)
 				.call(this.onCursorComplete, null, this)
 				.call($.proxy(this.showEnterKey, this, false));
@@ -344,31 +355,27 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 		},
 
 		onClickNextStep: function () {
-			createjs.Tween.removeAllTweens();
+			if (this.currentStep < this.steps.length - 1) {
+				createjs.Tween.removeAllTweens();
 
-			var step = this.getCurrentStep();
-			if (step) step.stop();
+				var step = this.getCurrentStep();
+				if (step) step.stop();
 
-			//if (this.getValue("started") && !this.getValue("finished")) {
-				if (this.currentStep < this.steps.length - 1) {
-					this.currentStep++;
-					this.refresh();
-				}
-			//}
+				this.currentStep++;
+				this.refresh();
+			}
 		},
 
 		onClickPreviousStep: function () {
-			createjs.Tween.removeAllTweens();
+			if (this.currentStep > 0) {
+				createjs.Tween.removeAllTweens();
 
-			var step = this.getCurrentStep();
-			if (step) step.stop();
+				var step = this.getCurrentStep();
+				if (step) step.stop();
 
-			//if (this.getValue("started") && !this.getValue("finished")) {
-				if (this.currentStep > 0) {
-					this.currentStep--;
-					this.refresh();
-				}
-			//}
+				this.currentStep--;
+				this.refresh();
+			}
 		},
 
 		positionButtons: function () {
@@ -383,11 +390,11 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 				*/
 			}
 
-			if (!this.getValue("started")) {
-				this.overlayButton.find("i").removeClass("fa-repeat").addClass("fa-play");
-				this.overlayButton.show(0);
-			} else if (this.getValue("finished")) {
+			if (this.getValue("finished")) {
 				this.overlayButton.find("i").removeClass("fa-play").addClass("fa-repeat");
+				this.overlayButton.show(0);
+			} else if (!this.getValue("started") || this.getValue("paused")) {
+				this.overlayButton.find("i").removeClass("fa-repeat").addClass("fa-play");
 				this.overlayButton.show(0);
 			} else {
 				this.overlayButton.hide(0);
@@ -396,11 +403,13 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 			this.overlayButton.position({ my: "center center", at: "center center", of: this.el, collision: "none" });
 		},
 
-		onClickRepeat: function (evt) {
+		onClickBigPlay: function (evt) {
 			if (this.options.player) {
-				this.currentStep = 0;
-				this.setValue("finished", false);
-				this.options.player.onClickRepeat();
+				if (this.getValue("finished")) {
+					this.options.player.start();
+				} else {
+					this.options.player.play();
+				}
 			}
 		}
 	};

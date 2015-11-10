@@ -1,7 +1,4 @@
-// TODO: use just 1 iframe for both watch and try (changing modes as necessary) [getDOM will need to be refreshed, possibly for the different modes?]
-// TODO: animate.css still seemed to trigger after I'd hit pause
-// TODO: arrows are not always showing up (covered by textbox)
-// TODO: make sure previous/next advance step text (on left)
+// TODO: [?] audio doesn't always play if it's already been played in the other watch it/try it tab
 // TODO: "how to use" overlay
 // TODO: make the continue button show up when there's no trigger (and/or no audio?)
 // TODO: "continue" trigger [or is "None"] sufficient?
@@ -60,3 +57,14 @@
 // DONE: "none" trigger supported
 // DONE: text input [re-done but untested]
 // DONE: scaling
+// DONE: make sure previous/next advance step text (on left)
+// DONE: hitting play when finished (ie, repeat overlay button is visible) needs to replay task
+// DONE: hide rectangles when not started or paused
+// DONE: keep last screenshot visible when finished
+// DONE: animate.css still seemed to trigger after I'd hit pause [now hidden when paused]
+// DONE: overlay play button should just resume not start over
+// DONE: re-playing try didn't have textboxes in the right place [step.positionText, removing animated classes may have helped]
+// DONE: arrows are not always showing up (covered by textbox)
+// DONE: after repeat button, pause button state isn't correct
+// DONE: on Safari, Enter graphic isn't centered correctly [-webkit prefix required for transforms]
+// DONE: on Safari, scaling (ie, click) transforms don't seem to work

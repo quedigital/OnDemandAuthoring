@@ -58,7 +58,7 @@ define([], function () {
 		},
 
 		onChangeText: function (evt) {
-			if (this.options.mode == "try" && this.options.trigger == "text") {
+			if (this.options.step.task.options.mode == "try" && this.options.trigger == "text") {
 				var targetText = this.options.input.toUpperCase();
 				var curText = this.inputBox.val().toUpperCase();
 				if (targetText == curText) {
@@ -70,7 +70,7 @@ define([], function () {
 		onClickHotspot: function (evt) {
 			if (!this.options.step.isStarted()) return;
 
-			if (this.options.mode == "watch") return;
+			if (this.options.step.task.options.mode == "watch") return;
 
 			if (this.options.trigger == "click") {
 				this.options.step.onComplete({ step: this, advance: true });
@@ -88,7 +88,7 @@ define([], function () {
 		},
 
 		onDoubleClickHotspot: function () {
-			if (this.options.mode == "watch") return;
+			if (this.options.step.task.options.mode == "watch") return;
 
 			if (this.delayedHint) {
 				clearTimeout(this.delayedHint);
@@ -103,7 +103,7 @@ define([], function () {
 		},
 
 		onHoverHotspot: function (evt) {
-			if (this.options.mode == "watch") return;
+			if (this.options.step.task.options.mode == "watch") return;
 
 			if (this.options.trigger == "hover") {
 				this.options.step.onComplete({ step: this, advance: true });
