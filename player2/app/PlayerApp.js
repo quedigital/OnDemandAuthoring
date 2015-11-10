@@ -235,9 +235,20 @@ define(["./Task"], function (Task) {
 			this.listeners.push( { event: event, callback: callback } );
 		},
 
-		getCurrentStep: function () {
+		getCurrentStepIndex: function () {
 			if (this.task) {
 				return this.task.getCurrentStepIndex();
+			}
+		},
+
+		gotoStep: function (index) {
+			if (this.task) {
+				this.setValue("interactedWith", true);
+				this.setValue("finished", false);
+
+				this.task.setCurrentStep(index);
+
+				this.onCurrentStep(this.getCurrentStepIndex());
 			}
 		}
 	};

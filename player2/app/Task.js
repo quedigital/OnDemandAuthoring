@@ -86,7 +86,14 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 		},
 
 		setCurrentStep: function (index) {
+			createjs.Tween.removeAllTweens();
+
+			var step = this.getCurrentStep();
+			if (step) step.stop();
+
 			this.currentStep = index;
+
+			this.refresh();
 		},
 
 		getCurrentStep: function () {
@@ -146,7 +153,7 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 					var time = distance / 500 * 1000;
 					time = Math.max(Math.min(time, 2000), 500);
 
-					if (step.data.trigger == "none") {
+					if (step.data.trigger == "none" || step.data.trigger === undefined) {
 						// THEORY: a "none" trigger doesn't need the cursor
 						this.doTrigger();
 					} else {
@@ -238,6 +245,7 @@ define(["./MouseTrail", "./Step", "./Hotspot"], function (MouseTrail, Step, Hots
 						this.typeText();
 						break;
 					case "none":
+					case undefined:
 						this.doNoneTriggerPause();
 						break;
 				}

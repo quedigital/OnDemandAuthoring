@@ -152,7 +152,7 @@ define(["./Hotspot"], function (Hotspot) {
 				if (this.options.mode == "watch") {
 					this.task.playCursor(this);
 				} else if (this.options.mode == "try") {
-					if (this.data.trigger == "none") {
+					if (this.data.trigger == "none" || this.data.trigger === undefined) {
 						this.task.onStepComplete({ step: this, advance: true });
 					}
 				}

@@ -1,4 +1,4 @@
-// TODO: [?] audio doesn't always play if it's already been played in the other watch it/try it tab
+// TODO: audio doesn't always play if it's already been played in the other watch it/try it tab [Dev browser issue? Incognito window seemed to clear it up]
 // TODO: "how to use" overlay
 // TODO: make the continue button show up when there's no trigger (and/or no audio?)
 // TODO: "continue" trigger [or is "None"] sufficient?
@@ -68,3 +68,4 @@
 // DONE: after repeat button, pause button state isn't correct
 // DONE: on Safari, Enter graphic isn't centered correctly [-webkit prefix required for transforms]
 // DONE: on Safari, scaling (ie, click) transforms don't seem to work
+// DONE: when finished, clicking on steps leaves the last image visible
