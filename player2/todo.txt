@@ -1,7 +1,6 @@
 // TODO: audio doesn't always play if it's already been played in the other watch it/try it tab [Dev browser issue? Incognito window seemed to clear it up]
 // TODO: "how to use" overlay
 // TODO: make the continue button show up when there's no trigger (and/or no audio?)
-// TODO: "continue" trigger [or is "None"] sufficient?
 // TODO: entering formula lesson, try it restarts watch it [narrower window problem, translation/position issue]
 // TODO: last step audio is playing twice (if you click before the audio is done) [fixed?]
 // TODO: delay hint in case it's an impending double-click
@@ -69,3 +68,4 @@
 // DONE: on Safari, Enter graphic isn't centered correctly [-webkit prefix required for transforms]
 // DONE: on Safari, scaling (ie, click) transforms don't seem to work
 // DONE: when finished, clicking on steps leaves the last image visible
+// DONE: "continue" trigger [or is "None"] sufficient? [none]

@@ -310,10 +310,14 @@ define(["./Hotspot"], function (Hotspot) {
 		},
 
 		playAudio: function () {
-			if (this.audio) {
-				this.audioComplete = false;
+			if (this.options.mode == "watch") {
+				if (this.audio) {
+					this.audioComplete = false;
 
-				this.audio[0].play();
+					this.audio[0].play();
+				}
+			} else {
+				this.onAudioPlayed();
 			}
 		},
 
@@ -328,15 +332,15 @@ define(["./Hotspot"], function (Hotspot) {
 			if (this.textBox) {
 				this.textBox.hide(0).removeClass("inviso animated hinted fadeInLeft fadeInRight fadeInDown fadeInUp");
 
-				//if (!this.props.finished)
-				this.textBox.addClass("animated fadeIn").show(0);
-			}
+				if (this.options.mode == "watch") {
+					this.textBox.addClass("animated fadeIn").show(0);
 
-			if (this.arrow) {
-				this.arrow.hide(0).removeClass("animated fadeInLeft fadeInRight fadeInDown fadeInUp");
+					if (this.arrow) {
+						this.arrow.hide(0).removeClass("animated fadeInLeft fadeInRight fadeInDown fadeInUp");
 
-				//if (!this.props.finished)
-				this.arrow.addClass("animated fadeIn").show(0);
+						this.arrow.addClass("animated fadeIn").show(0);
+					}
+				}
 			}
 
 			if (this.hotspot) {

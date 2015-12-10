@@ -87,6 +87,23 @@ body {
 		&.hinted {
 			background: linear-gradient(to top, #a23f48 0%, #d31f41 80%, #c6081d 90%, #eea196 100%);
 			transition: background-color .5s ease-in-out;
+
+			&:before {
+				content: "Try Again";
+				display: block;
+				position: absolute;
+				top: -5px;
+				left: 0;
+				font-size: 18px;
+				font-weight: bold;
+				font-style: italic;
+				transform: translateY(-100%);
+				color: #c6081d;
+				background-color: white;
+				border: 3px solid #d31f41;
+				padding: 0px 10px;
+				border-radius: 15px;
+			}
 		}
 	}
 
